@@ -21,7 +21,6 @@ const handler = async (interaction) => {
 
 const main = async () => {
   const redisClient = redis.createClient(process.env.REDIS_URL);
-  await redisClient.connect();
 
   client.on('ready', readyHandler);
   client.on('interactionCreate', handler);
