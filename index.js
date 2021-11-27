@@ -1,4 +1,5 @@
 const { Client, Intents } = require('discord.js');
+const redis = require("redis");
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
@@ -6,16 +7,25 @@ const GUILD_ID = process.env.GUILD_ID;
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
-client.on('ready', () => {
+const readyHandler = () => {
   console.log(`Logged in as ${client.user.tag}!`);
-});
+};
 
-client.on('interactionCreate', async interaction => {
+const handler = async (interaction) => {
   if (!interaction.isCommand()) return;
 
   if (interaction.commandName === 'ping') {
     await interaction.reply('Pong!');
   }
-});
+};
 
-client.login(TOKEN);
+const main = async () => {
+  const redisClient = redis.createClient(process.env.REDIS_URL);
+  await redisClient.connect();
+
+  client.on('ready', readyHandler);
+  client.on('interactionCreate', handler);
+  client.login(TOKEN);
+}
+
+await main();
