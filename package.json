@@ -2,21 +2,20 @@
   "name": "saren",
   "version": "1.0.0",
   "description": "Princess Connect! Re:Dive Clan Roster Management Bot",
+  "author": "FabulousCupcake",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FabulousCupcake/saren.git"
+  },
   "main": "index.js",
   "scripts": {
     "register": "node tools/register.js",
     "start": "node index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FabulousCupcake/saren.git"
+  "engines": {
+    "node": "16.x"
   },
-  "author": "FabulousCupcake",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/FabulousCupcake/saren/issues"
-  },
-  "homepage": "https://github.com/FabulousCupcake/saren#readme",
   "dependencies": {
     "@discordjs/rest": "0.1.0-canary.0",
     "discord-api-types": "^0.24.0",
