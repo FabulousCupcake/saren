@@ -28,4 +28,4 @@ const main = async () => {
   client.login(TOKEN);
 }
 
-await main();
+main();
