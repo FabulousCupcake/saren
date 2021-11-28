@@ -63,7 +63,7 @@ const statusFunc = async (interaction) => {
         return;
     }
 
-    if (requestBody) {
+    if (responseBody) {
         interaction.followUp({
             content: `I have the account data for ${targetUser.tag} written down right here!`,
             ephemeral: true,
