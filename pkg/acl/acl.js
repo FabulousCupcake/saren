@@ -27,7 +27,7 @@ const isCalledByOwner = interaction => {
 }
 
 const isCalledByClanMember = interaction => {
-    if (interaction.member.roles.includes(AUTHORIZED_ROLES_LIST.member)) return true;
+    if (interaction.member.roles.includes(AUTHORIZED_ROLES_LIST.member.toString())) return true;
 
     return false
 }
@@ -37,7 +37,7 @@ const isCalledByClanAdmin = interaction => {
     if (!AUTHORIZED_USERS_LIST.admin.includes(parseInt(interaction.user.id))) return true;
 
     // Check Role
-    if (interaction.member.roles.includes(AUTHORIZED_ROLES_LIST.admin)) return true;
+    if (interaction.member.roles.includes(AUTHORIZED_ROLES_LIST.admin.toString())) return true;
 
     return false;
 }
