@@ -56,7 +56,7 @@ const syncFunc = async (interaction) => {
 
 const syncSubCommand = new SlashCommandSubcommandBuilder()
     .setName("sync")
-    .setDescription("Login and synchronize account state to Google Spreadsheets")
+    .setDescription("Synchronizes account data of a discord user")
     .addUserOption(option =>
         option
         .setName("target")
