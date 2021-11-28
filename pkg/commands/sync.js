@@ -1,6 +1,7 @@
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
+const { updateSpreadsheet } = require("../sheets/sheets.js");
 const { login } = require("../lambda/lambda.js");
 
 const checkPermissions = interaction => {
@@ -63,6 +64,7 @@ const syncFunc = async (interaction) => {
         return;
     }
 
+    // If falsey, it means Suzume didn't find a state file associated with the discord user
     if (!responseBody) {
         interaction.followUp({
             content: `I don't have account data for ${targetUser.tag}!`,
@@ -71,9 +73,21 @@ const syncFunc = async (interaction) => {
         return;
     }
 
-    // TODO: Write to spreadsheet
+    // Write to spreadsheet
+    try {
+        await updateSpreadsheet(responseBody);
+    } catch (err) {
+        console.error("Failed updating spreadsheet", err);
+        interaction.followUp({
+            content: "Oh no! I was writing down the data from Suzume but the sheets got blown away by the wind!",
+            ephemeral: true,
+        });
+        return;
+    }
 
+    // Report back successful update
     const username = responseBody.user_info.user_name;
+    const accountId = responseBody.user_info.viewer_id;
     console.info(`Successfully logged in to Discord User ${targetUser.tag} to account id ${accountId} with username ${username}.`);
     interaction.followUp({
         content: `I have updated Google Spreadsheet for ${targetUser.tag} / ${username} (${accountId})!`,
