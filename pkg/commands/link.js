@@ -49,8 +49,6 @@ const linkFunc = async (interaction) => {
     try {
         const response = await register(targetUser.id, accountId, accountPassword);
         responseBody = JSON.parse(Buffer.from(response.Payload).toString());
-
-        if (responseBody) throw "Invalid request body";
     } catch (err) {
         console.error("Failed lambda call", err);
         interaction.followUp({
