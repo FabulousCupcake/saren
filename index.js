@@ -1,10 +1,10 @@
 const { Client, Intents } = require("discord.js");
 const { createClient } = require("redis");
 
-const link = require("./pkg/commands/link");
-const unlink = require("./pkg/commands/unlink");
-const status = require("./pkg/commands/status");
-const sync = require("./pkg/commands/sync");
+const { linkFunc } = require("./pkg/commands/link");
+const { unlinkFunc } = require("./pkg/commands/unlink");
+const { statusFunc } = require("./pkg/commands/status");
+const { syncFunc } = require("./pkg/commands/sync");
 
 const TOKEN = process.env.DISCORD_TOKEN;
 // const CLIENT_ID = process.env.CLIENT_ID;
@@ -25,16 +25,16 @@ const handler = async (interaction) => {
 
   switch(command) {
     case "link":
-      await link(interaction);
+      await linkFunc(interaction);
       break;
     case "unlink":
-      await unlink(interaction);
+      await unlinkFunc(interaction);
       break;
     case "status":
-      await status(interaction);
+      await statusFunc(interaction);
       break;
     case "sync":
-      await sync(interaction);
+      await syncFunc(interaction);
       break;
     default:
       console.warn(`Unknown command: ${command}`);
