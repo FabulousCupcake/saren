@@ -21,10 +21,7 @@ const AUTHORIZED_ROLES_LIST = {
 };
 
 const isCalledByOwner = interaction => {
-    console.log("ownersList", AUTHORIZED_USERS_LIST.owner)
-    console.log("callerid", interaction.user.id);
-    console.log("result", AUTHORIZED_USERS_LIST.owner.includes(interaction.user.id));
-    if (AUTHORIZED_USERS_LIST.owner.includes(interaction.user.id)) return true;
+    if (AUTHORIZED_USERS_LIST.owner.includes(parseInt(interaction.user.id))) return true;
 
     return false;
 }
@@ -37,7 +34,7 @@ const isCalledByClanMember = interaction => {
 
 const isCalledByClanAdmin = interaction => {
     // Check ID
-    if (!AUTHORIZED_USERS_LIST.admin.includes(interaction.user.id)) return true;
+    if (!AUTHORIZED_USERS_LIST.admin.includes(parseInt(interaction.user.id))) return true;
 
     // Check Role
     if (interaction.member.roles.includes(AUTHORIZED_ROLES_LIST.admin)) return true;
