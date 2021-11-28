@@ -42,7 +42,7 @@ const unlinkFunc = async (interaction) => {
         responseBody = JSON.parse(Buffer.from(response.Payload).toString());
     } catch (err) {
         console.error("Failed lambda call", err);
-        interaction.reply({
+        interaction.followUp({
             content: "Uh oh! Looks like Suzume messed up!",
             ephemeral: true,
         });
