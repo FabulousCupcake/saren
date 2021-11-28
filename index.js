@@ -45,6 +45,7 @@ const handler = async (interaction) => {
 const main = async () => {
   initializeReditClient();
   initializeLambdaClient();
+  initializeSpreadsheetClient();
   client.on("ready", readyHandler);
   client.on("interactionCreate", handler);
   client.login(TOKEN);
