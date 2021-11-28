@@ -1,8 +1,8 @@
-const { isOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
+const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const checkPermissions = interaction => {
-    if (isOwner(interaction.user)) {
+    if (isCalledByOwner(interaction)) {
         return {
             allowed: true,
             reason: "Caller is application owner",

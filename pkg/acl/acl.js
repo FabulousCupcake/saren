@@ -24,6 +24,7 @@ const isOwner = id => AUTHORIZED_USERS_LIST.owner.includes(id);
 const isAdmin = id => AUTHORIZED_USERS_LIST.admin.includes(id);
 const hasAdminRole = roles => roles.includes(AUTHORIZED_ROLES_LIST.admin);
 const hasMemberRole = roles => roles.includes(AUTHORIZED_ROLES_LIST.member);
+const isCalledByOwner = interaction => AUTHORIZED_USERS_LIST.owner.includes(interaction.user.id);
 const isCalledByClanMember = interaction => hasMemberRole(interaction.member.roles);
 const isCalledByClanAdmin = interaction => {
     if (isAdmin(interaction.user.id)) return true;
@@ -41,8 +42,8 @@ const isTargetAllowed = interaction => {
 
     // If target is others, caller must be admin
     if (hasAdminRole(callerRoles)) return true;
-    if (isAdmin(callerUser)) return true;
-    if (isOwner(callerUser)) return true;
+    if (isAdmin(callerUser.id)) return true;
+    if (isOwner(callerUser.id)) return true;
     return false
 }
 
@@ -59,6 +60,7 @@ module.exports = {
     isAdmin,
     hasAdminRole,
     hasMemberRole,
+    isCalledByOwner,
     isCalledByClanMember,
     isCalledByClanAdmin,
     isTargetAllowed,
