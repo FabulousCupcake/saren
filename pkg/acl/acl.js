@@ -20,31 +20,26 @@ const AUTHORIZED_ROLES_LIST = {
     "member": 859805729338818561,   // Vanilla
 };
 
-const isOwner = id => AUTHORIZED_USERS_LIST.owner.includes(id);
-const isAdmin = id => AUTHORIZED_USERS_LIST.admin.includes(id);
-const hasAdminRole = roles => roles.includes(AUTHORIZED_ROLES_LIST.admin);
-const hasMemberRole = roles => roles.includes(AUTHORIZED_ROLES_LIST.member);
-const isCalledByOwner = interaction => AUTHORIZED_USERS_LIST.owner.includes(interaction.user.id);
-const isCalledByClanMember = interaction => hasMemberRole(interaction.member.roles);
-const isCalledByClanAdmin = interaction => {
-    if (isAdmin(interaction.user.id)) return true;
-    // if (hasAdminRole(interaction.member.roles)) return true;
+const isCalledByOwner = interaction => {
+    if (AUTHORIZED_USERS_LIST.owner.includes(interaction.user.id)) return true;
+
     return false;
 }
 
-const isTargetAllowed = interaction => {
-    const targetUser = interaction.options.getUser("target");
-    const callerUser = interaction.user;
-    const callerRoles = interaction.member.roles;
+const isCalledByClanMember = interaction => {
+    if (interaction.member.roles.includes(AUTHORIZED_ROLES_LIST.member)) return true;
 
-    // If target is self, then it's good
-    if (targetUser.id === callerUser.id) return true;
-
-    // If target is others, caller must be admin
-    if (hasAdminRole(callerRoles)) return true;
-    if (isAdmin(callerUser.id)) return true;
-    if (isOwner(callerUser.id)) return true;
     return false
+}
+
+const isCalledByClanAdmin = interaction => {
+    // Check ID
+    if (!AUTHORIZED_USERS_LIST.admin.includes(interaction.user.id)) return true;
+
+    // Check Role
+    if (interaction.member.roles.includes(AUTHORIZED_ROLES_LIST.admin)) return true;
+
+    return false;
 }
 
 const targetIsCaller = interaction => {
@@ -56,13 +51,8 @@ const targetIsCaller = interaction => {
 module.exports = {
     AUTHORIZED_USERS_LIST,
     AUTHORIZED_ROLES_LIST,
-    isOwner,
-    isAdmin,
-    hasAdminRole,
-    hasMemberRole,
     isCalledByOwner,
     isCalledByClanMember,
     isCalledByClanAdmin,
-    isTargetAllowed,
     targetIsCaller,
 }
