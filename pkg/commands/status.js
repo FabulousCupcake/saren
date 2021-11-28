@@ -55,7 +55,7 @@ const statusFunc = async (interaction) => {
         const response = await check(targetUser.id);
         responseBody = JSON.parse(Buffer.from(response.Payload).toString());
     } catch (err) {
-        console.error("Failed lambda call", err, response);
+        console.error("Failed lambda call", err);
         interaction.followUp({
             content: "Uh oh! Looks like Suzume messed up!",
             ephemeral: true,
@@ -63,10 +63,9 @@ const statusFunc = async (interaction) => {
         return;
     }
 
-    const discordTag = targetUser.tag;
     const text = (responseBody) ? "do" : "don't";
     interaction.followUp({
-        content: `I ${text} have account data for ${discordTag}!`,
+        content: `I ${text} have account data for ${targetUser.tag}!`,
         ephemeral: true,
     })
 }

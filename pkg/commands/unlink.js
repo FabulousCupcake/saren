@@ -41,7 +41,7 @@ const unlinkFunc = async (interaction) => {
         const response = await check(targetUser.id);
         responseBody = JSON.parse(Buffer.from(response.Payload).toString());
     } catch (err) {
-        console.error("Failed lambda call", err, response);
+        console.error("Failed lambda call", err);
         interaction.reply({
             content: "Uh oh! Looks like Suzume messed up!",
             ephemeral: true,
@@ -49,18 +49,18 @@ const unlinkFunc = async (interaction) => {
         return;
     }
 
-    const discordTag = targetUser.tag;
-    console.info(`Successfully disabled state file for ${discordTag} with account id ${accountId}.`);
+    console.info(`Successfully disabled state file for ${targetUser.tag} with account id ${accountId}.`);
 
-    if (responseBody) {
+    if (!responseBody) {
         interaction.followUp({
-            content: `I have removed the account data for ${discordTag}!`,
+            content: `Hmm, I don't seem to have any account data for ${targetUser.tag}...`,
             ephemeral: true,
         });
         return;
     }
+
     interaction.followUp({
-        content: `Hmm, I don't seem to have any account data for ${discordTag}...`,
+        content: `I have removed the account data for ${targetUser.tag}!`,
         ephemeral: true,
     });
 }

@@ -54,10 +54,8 @@ const syncFunc = async (interaction) => {
     try {
         const response = await check(targetUser.id);
         responseBody = JSON.parse(Buffer.from(response.Payload).toString());
-
-        if (!responseBody) throw "Invalid request body";
     } catch (err) {
-        console.error("Failed lambda call", err, response);
+        console.error("Failed lambda call", err);
         interaction.followUp({
             content: "Uh oh! Looks like Suzume messed up!",
             ephemeral: true,
@@ -65,13 +63,20 @@ const syncFunc = async (interaction) => {
         return;
     }
 
+    if (!responseBody) {
+        interaction.followUp({
+            content: `I don't have account data for ${targetUser.tag}!`,
+            ephemeral: true,
+        });
+        return;
+    }
+
     // TODO: Write to spreadsheet
 
-    const discordTag = targetUser.tag;
     const username = responseBody.user_info.user_name;
-    console.info(`Successfully logged in to Discord User ${discordTag} to account id ${accountId} with username ${username}.`);
+    console.info(`Successfully logged in to Discord User ${targetUser.tag} to account id ${accountId} with username ${username}.`);
     interaction.followUp({
-        content: `I have updated Google Spreadsheet for ${discordTag} / ${username} (${accountId})!`,
+        content: `I have updated Google Spreadsheet for ${targetUser.tag} / ${username} (${accountId})!`,
         ephemeral: true,
     });
 }

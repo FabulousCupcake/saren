@@ -50,9 +50,9 @@ const linkFunc = async (interaction) => {
         const response = await register(targetUser.id, accountId, accountPassword);
         responseBody = JSON.parse(Buffer.from(response.Payload).toString());
 
-        if (!responseBody) throw "Invalid request body";
+        if (responseBody) throw "Invalid request body";
     } catch (err) {
-        console.error("Failed lambda call", err, response);
+        console.error("Failed lambda call", err);
         interaction.followUp({
             content: "Uh oh! Looks like Suzume messed up!",
             ephemeral: true,
@@ -60,11 +60,10 @@ const linkFunc = async (interaction) => {
         return;
     }
 
-    const discordTag = targetUser.tag;
     const username = responseBody.user_info.user_name;
-    console.info(`Successfully linked Discord User ${discordTag} to account id ${accountId} with username ${username}.`);
+    console.info(`Successfully linked Discord User ${targetUser.tag} to account id ${accountId} with username ${username}.`);
     interaction.followUp({
-        content: `I have written down the account data for ${discordTag} / ${username} (${accountId})!`,
+        content: `I have written down the account data for ${targetUser.tag} / ${username} (${accountId})!`,
         ephemeral: true,
     });
 }
