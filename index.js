@@ -2,6 +2,7 @@ const { Client, Intents } = require("discord.js");
 
 const { initializeReditClient } = require("./pkg/redis/redis.js");
 const { initializeLambdaClient } = require("./pkg/lambda/lambda.js");
+const { initializeSpreadsheetClient } = require("./pkg/sheets/sheets.js");
 const { linkFunc } = require("./pkg/commands/link");
 const { unlinkFunc } = require("./pkg/commands/unlink");
 const { statusFunc } = require("./pkg/commands/status");
