@@ -4,7 +4,7 @@ const parseResponseBody = (resBody) => {
 
     const units = resBody.unit_list;
     const result = units.map((u) => {
-      const id = u.id.toString().substr(0, 4);
+      const id = parseInt(u.id.toString().substr(0, 4), 10);
       const level = u.unit_level;
       const star = u.unit_rarity;
       const shard = fetchShardAmount(id);
