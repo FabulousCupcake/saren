@@ -49,7 +49,7 @@ const unlinkFunc = async (interaction) => {
         return;
     }
 
-    console.info(`Successfully disabled state file for ${targetUser.tag} with account id ${accountId}.`);
+    console.info(`Successfully disabled state file for ${targetUser.tag}.`);
 
     if (!responseBody) {
         interaction.followUp({
