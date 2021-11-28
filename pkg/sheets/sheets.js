@@ -21,12 +21,26 @@ const initializeSpreadsheetClient = async () => {
     console.log("Successfully initialized Google Spreadsheet Client", doc.title);
 };
 
+// Updates row 1 containing name
+const updateSheetMetadata = async (sheet) => {
+    await sheet.loadCells(["F1", "M1"]);
+    sheet.getCellByA1("F1").value = "Automatic";
+    sheet.getCellByA1("M1").value = new Date().toUTCString();
+}
+
 const newFromTemplate = async (newSheetName) => {
     await doc.sheetsByTitle["Template"].copyToSpreadsheet(SPREADSHEET_ID);
     await doc.loadInfo();
     await doc.sheetsByTitle["Copy of Template"].updateProperties({
         title: newSheetName,
     });
+    await doc.loadInfo();
+
+    // Update name on B1
+    const sheet = doc.sheetsByTitle[newSheetName];
+    await sheet.loadCells("B1");
+    sheet.getCellByA1("B1").value = newSheetName;
+    await sheet.saveUpdatedCells();
 }
 
 // updateSpreadsheet receives /load/index response body
@@ -68,6 +82,9 @@ const updateSpreadsheet = async (responseBody) => {
             cell.value = col;
         });
     });
+
+    // Write metadata
+    await updateSheetMetadata(sheet);
 
     // Send data
     return await sheet.saveUpdatedCells();
