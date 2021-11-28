@@ -6,7 +6,7 @@ const initializeReditClient = () => {
     redisClient = createClient(process.env.REDIS_URL);
 }
 
-export {
+module.exports = {
     redisClient,
     initializeReditClient,
 }
