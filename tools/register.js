@@ -2,7 +2,7 @@ const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
 const { SlashCommandBuilder } = require("@discordjs/builders");
 
-const { AUTHORIZED_ROLES_LIST } = require("../pkg/acl/acl.js")
+const { AUTHORIZED_USERS_LIST, AUTHORIZED_ROLES_LIST } = require("../pkg/acl/acl.js")
 const { linkSubCommand } = require("../pkg/commands/link.js");
 const { unlinkSubCommand } = require("../pkg/commands/unlink.js");
 const { statusSubCommand } = require("../pkg/commands/status.js");
@@ -21,9 +21,24 @@ const COMMANDS = new SlashCommandBuilder()
   .addSubcommand(statusSubCommand)
   .addSubcommand(syncSubCommand)
 
-const PERMISSIONS = {
-
-}
+const PERMISSIONS = [
+  ...AUTHORIZED_USERS_LIST.owner.map(id => ({
+    id: id,
+    type: 1,
+    permission: true,
+  })),
+  // Admins — can't add due to 10 permission max length
+  // ...AUTHORIZED_USERS_LIST.admin.map(id => ({
+  //   id: id,
+  //   type: 1,
+  //   permission: true,
+  // })),
+  {
+    id: AUTHORIZED_ROLES_LIST.member,
+    type: 2,
+    permission: true,
+  },
+];
 
 // Globals
 const rest = new REST({ version: '9' }).setToken(TOKEN);
@@ -45,16 +60,13 @@ const registerCommands = async () => {
 
 // adjustPermissions sets command permission
 const adjustPermissions = async (commandId) => {
-  const permission = {
-    type: 2, // 1 = User, 2 = Role
-    id: AUTHORIZED_ROLES_LIST.admin,
-    permission: true,
-  };
+  console.log("==> Permissions JSON:");
+  console.log(JSON.stringify(PERMISSIONS, null, 2));
 
   console.log("==> Adjusting slash command permission");
   await rest.put(
     Routes.applicationCommandPermissions(CLIENT_ID, GUILD_ID, commandId),
-    { body: [ permission ] },
+    { body: { permissions: PERMISSIONS } },
   );
   console.log("==> Successfully adjusted slash command permissions!");
 };

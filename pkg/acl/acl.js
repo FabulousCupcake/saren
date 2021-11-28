@@ -1,4 +1,4 @@
-const AUTHORIZED_USER_LIST = {
+const AUTHORIZED_USERS_LIST = {
     "owner": [
         109729829670154240,   // FabulousCupcake#7972
     ],
@@ -16,16 +16,12 @@ const AUTHORIZED_USER_LIST = {
 };
 
 const AUTHORIZED_ROLES_LIST = {
-    "admin": [
-        866363432323514368,   // Vanilla Administration
-    ],
-    "member": [
-        859805729338818561,   // Vanilla
-    ],
+    "admin": 866363432323514368,    // Vanilla Administration
+    "member": 859805729338818561,   // Vanilla
 };
 
-const isOwner = id => AUTHORIZED_USER_LIST.owner.includes(id);
-const isAdmin = id => AUTHORIZED_USER_LIST.admin.includes(id);
+const isOwner = id => AUTHORIZED_USERS_LIST.owner.includes(id);
+const isAdmin = id => AUTHORIZED_USERS_LIST.admin.includes(id);
 const hasAdminRole = roles => roles.has(AUTHORIZED_ROLES_LIST.admin);
 const hasUserRole = roles => roles.has(AUTHORIZED_ROLES_LIST.member);
 const isCalledByClanMember = interaction => hasUserRole(interaction.member.roles);
@@ -57,7 +53,7 @@ const targetIsCaller = interaction => {
 }
 
 module.exports = {
-    AUTHORIZED_USER_LIST,
+    AUTHORIZED_USERS_LIST,
     AUTHORIZED_ROLES_LIST,
     isOwner,
     isAdmin,
