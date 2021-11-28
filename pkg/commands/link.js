@@ -30,6 +30,8 @@ const checkPermissions = interaction => {
 };
 
 const linkFunc = async (interaction) => {
+    console.log(interaction, interaction.member, interaction.member.roles)
+
     const { allowed, reason } = checkPermissions(interaction);
     if (!allowed) return interaction.reply(reason);
 
