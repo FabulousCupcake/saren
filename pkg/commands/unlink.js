@@ -1,5 +1,7 @@
-const { isCalledByOwner, targetIsCaller } = require("../acl/acl.js");
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
+
+const { isCalledByOwner, targetIsCaller } = require("../acl/acl.js");
+const { disable } = require("../lambda/lambda.js");
 
 const checkPermissions = interaction => {
     if (isCalledByOwner(interaction)) {
@@ -34,13 +36,33 @@ const unlinkFunc = async (interaction) => {
 
     const targetUser = interaction.options.getUser("target");
 
-    // TODO: Invoke Lambda Here
-    // const result = suzume.invoke("disable", [targetUser.id]);
-    console.log("invoke", "disable", targetUser.id);
+    let responseBody;
+    try {
+        const response = await check(targetUser.id);
+        responseBody = JSON.parse(Buffer.from(response.Payload).toString());
+    } catch (err) {
+        console.error("Failed lambda call", err, response);
+        interaction.reply({
+            content: "Uh oh! Looks like Suzume messed up!",
+            ephemeral: true,
+        });
+        return;
+    }
+
+    const discordTag = targetUser.tag;
+    console.info(`Successfully disabled state file for ${discordTag} with account id ${accountId}.`);
+
+    if (responseBody) {
+        interaction.reply({
+            content: `I have removed the account data for ${discordTag}!`,
+            ephemeral: true,
+        });
+        return;
+    }
     interaction.reply({
-        content: `Invoke Lambda: disable ${targetUser.id}`,
+        content: `Hmm, I don't seem to have any account data for ${discordTag}...`,
         ephemeral: true,
-    })
+    });
 }
 
 const unlinkSubCommand = new SlashCommandSubcommandBuilder()

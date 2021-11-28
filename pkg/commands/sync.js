@@ -1,5 +1,7 @@
-const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
+
+const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
+const { login } = require("../lambda/lambda.js");
 
 const checkPermissions = interaction => {
     if (isCalledByOwner(interaction)) {
@@ -48,13 +50,30 @@ const syncFunc = async (interaction) => {
 
     const targetUser = interaction.options.getUser("target");
 
-    // TODO: Invoke Lambda Here
-    // const result = suzume.invoke("sync", [targetUser.id]);
-    console.log("invoke", "sync", targetUser.id);
+    let responseBody;
+    try {
+        const response = await check(targetUser.id);
+        responseBody = JSON.parse(Buffer.from(response.Payload).toString());
+
+        if (!responseBody) throw "Invalid request body";
+    } catch (err) {
+        console.error("Failed lambda call", err, response);
+        interaction.reply({
+            content: "Uh oh! Looks like Suzume messed up!",
+            ephemeral: true,
+        });
+        return;
+    }
+
+    // TODO: Write to spreadsheet
+
+    const discordTag = targetUser.tag;
+    const username = responseBody.user_info.user_name;
+    console.info(`Successfully logged in to Discord User ${discordTag} to account id ${accountId} with username ${username}.`);
     interaction.reply({
-        content: `Invoke Lambda: sync ${targetUser.id}`,
+        content: `I have updated Google Spreadsheet for ${discordTag} / ${username} (${accountId})!`,
         ephemeral: true,
-    })
+    });
 }
 
 const syncSubCommand = new SlashCommandSubcommandBuilder()

@@ -1,5 +1,7 @@
-const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
+
+const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
+const { check } = require("../lambda/lambda.js");
 
 const checkPermissions = interaction => {
     if (isCalledByOwner(interaction)) {
@@ -48,11 +50,23 @@ const statusFunc = async (interaction) => {
 
     const targetUser = interaction.options.getUser("target");
 
-    // TODO: Invoke Lambda Here
-    // const result = suzume.invoke("sync", [targetUser.id]);
-    console.log("invoke", "check", targetUser.id);
+    let responseBody;
+    try {
+        const response = await check(targetUser.id);
+        responseBody = JSON.parse(Buffer.from(response.Payload).toString());
+    } catch (err) {
+        console.error("Failed lambda call", err, response);
+        interaction.reply({
+            content: "Uh oh! Looks like Suzume messed up!",
+            ephemeral: true,
+        });
+        return;
+    }
+
+    const discordTag = targetUser.tag;
+    const text = (responseBody) ? "do" : "don't";
     interaction.reply({
-        content: `Invoke Lambda: check ${targetUser.id}`,
+        content: `I ${text} have account data for ${discordTag}!`,
         ephemeral: true,
     })
 }

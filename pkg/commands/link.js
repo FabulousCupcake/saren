@@ -1,5 +1,7 @@
-const { isCalledByOwner, isCalledByClanMember, targetIsCaller } = require("../acl/acl.js");
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
+
+const { isCalledByOwner, isCalledByClanMember, targetIsCaller } = require("../acl/acl.js");
+const { register } = require("../lambda/lambda.js");
 
 const checkPermissions = interaction => {
     if (isCalledByOwner(interaction)) {
@@ -43,13 +45,28 @@ const linkFunc = async (interaction) => {
     const accountId = interaction.options.getString("id");
     const accountPassword = interaction.options.getString("password");
 
-    // TODO: Invoke Lambda Here
-    // const result = suzume.invoke("register", [targetUser.id, accountId, accountPassword]);
-    console.log("invoke", "register", targetUser.id, accountId, accountPassword);
+    let responseBody;
+    try {
+        const response = await register(targetUser.id, accountId, accountPassword);
+        responseBody = JSON.parse(Buffer.from(response.Payload).toString());
+
+        if (!responseBody) throw "Invalid request body";
+    } catch (err) {
+        console.error("Failed lambda call", err, response);
+        interaction.reply({
+            content: "Uh oh! Looks like Suzume messed up!",
+            ephemeral: true,
+        });
+        return;
+    }
+
+    const discordTag = targetUser.tag;
+    const username = responseBody.user_info.user_name;
+    console.info(`Successfully linked Discord User ${discordTag} to account id ${accountId} with username ${username}.`);
     interaction.reply({
-        content: `Invoke Lambda: register ${targetUser.id}, ${accountId}, ${accountPassword}`,
+        content: `I have written down the account data for ${discordTag} / ${username} (${accountId})!`,
         ephemeral: true,
-    })
+    });
 }
 
 const linkSubCommand = new SlashCommandSubcommandBuilder()
