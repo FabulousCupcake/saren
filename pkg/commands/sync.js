@@ -52,7 +52,7 @@ const syncFunc = async (interaction) => {
 
     let responseBody;
     try {
-        const response = await check(targetUser.id);
+        const response = await login(targetUser.id);
         responseBody = JSON.parse(Buffer.from(response.Payload).toString());
     } catch (err) {
         console.error("Failed lambda call", err);
