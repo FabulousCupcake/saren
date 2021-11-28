@@ -58,7 +58,7 @@ const syncFunc = async (interaction) => {
         if (!responseBody) throw "Invalid request body";
     } catch (err) {
         console.error("Failed lambda call", err, response);
-        interaction.reply({
+        interaction.followUp({
             content: "Uh oh! Looks like Suzume messed up!",
             ephemeral: true,
         });
@@ -70,7 +70,7 @@ const syncFunc = async (interaction) => {
     const discordTag = targetUser.tag;
     const username = responseBody.user_info.user_name;
     console.info(`Successfully logged in to Discord User ${discordTag} to account id ${accountId} with username ${username}.`);
-    interaction.reply({
+    interaction.followUp({
         content: `I have updated Google Spreadsheet for ${discordTag} / ${username} (${accountId})!`,
         ephemeral: true,
     });

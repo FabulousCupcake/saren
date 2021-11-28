@@ -53,13 +53,13 @@ const unlinkFunc = async (interaction) => {
     console.info(`Successfully disabled state file for ${discordTag} with account id ${accountId}.`);
 
     if (responseBody) {
-        interaction.reply({
+        interaction.followUp({
             content: `I have removed the account data for ${discordTag}!`,
             ephemeral: true,
         });
         return;
     }
-    interaction.reply({
+    interaction.followUp({
         content: `Hmm, I don't seem to have any account data for ${discordTag}...`,
         ephemeral: true,
     });
