@@ -21,7 +21,7 @@ const handler = async (interaction) => {
   if (!interaction.isCommand()) return;
   if (interaction.commandName !== "saren") return;
 
-  const command = options.getSubcommand();
+  const command = interaction.options.getSubcommand();
 
   switch(command) {
     case "link":
