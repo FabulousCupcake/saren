@@ -1,7 +1,7 @@
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
-const { check } = require("../lambda/lambda.js");
+const { hasStateFile } = require("../s3/s3.js");
 
 const checkPermissions = interaction => {
     if (isCalledByOwner(interaction)) {
@@ -50,20 +50,9 @@ const statusFunc = async (interaction) => {
 
     const targetUser = interaction.options.getUser("target");
 
-    let responseBody;
-    try {
-        const response = await check(targetUser.id);
-        responseBody = JSON.parse(Buffer.from(response.Payload).toString());
-    } catch (err) {
-        console.error("Failed lambda call", err);
-        interaction.followUp({
-            content: "Uh oh! Looks like Suzume messed up!",
-            ephemeral: true,
-        });
-        return;
-    }
+    const stateFileExists = await hasStateFile(targetUser.id);
 
-    if (responseBody) {
+    if (stateFileExists) {
         interaction.followUp({
             content: `I have the account data for ${targetUser.tag} written down right here!`,
             ephemeral: true,
