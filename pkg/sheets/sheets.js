@@ -6,7 +6,7 @@ const SPREADSHEET_ID = "1tpbLmB4Fha_0TpMd4h3d2xmpf_GztvpFP_DFmdaOHfM";
 const ROW_START = 3;
 const ROW_END = 203;
 const COL_START = 1;
-const COL_END = 17;
+const COL_END = 18;
 
 let doc;
 
