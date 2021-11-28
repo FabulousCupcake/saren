@@ -10,7 +10,7 @@ const TOKEN = process.env.DISCORD_TOKEN;
 // const CLIENT_ID = process.env.CLIENT_ID;
 // const GUILD_ID = process.env.GUILD_ID;
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 const redisClient = createClient(process.env.REDIS_URL);
 
 const readyHandler = () => {
