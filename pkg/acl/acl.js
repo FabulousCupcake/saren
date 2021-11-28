@@ -23,18 +23,18 @@ const AUTHORIZED_ROLES_LIST = {
 const isOwner = id => AUTHORIZED_USERS_LIST.owner.includes(id);
 const isAdmin = id => AUTHORIZED_USERS_LIST.admin.includes(id);
 const hasAdminRole = roles => roles.has(AUTHORIZED_ROLES_LIST.admin);
-const hasUserRole = roles => roles.has(AUTHORIZED_ROLES_LIST.member);
-const isCalledByClanMember = interaction => hasUserRole(interaction.member.roles);
+const hasMemberRole = roles => roles.has(AUTHORIZED_ROLES_LIST.member);
+const isCalledByClanMember = interaction => hasMemberRole(interaction.member.roles.cache);
 const isCalledByClanAdmin = interaction => {
     if (isAdmin(interaction.user.id)) return true;
-    // if (hasAdminRole(interaction.member.roles)) return true;
+    // if (hasAdminRole(interaction.member.roles.cache)) return true;
     return false;
 }
 
 const isTargetAllowed = interaction => {
     const targetUser = interaction.options.getUser("target");
     const callerUser = interaction.user;
-    const callerRoles = interaction.member.roles;
+    const callerRoles = interaction.member.roles.cache;
 
     // If target is self, then it's good
     if (targetUser.id === callerUser.id) return true;
@@ -58,7 +58,7 @@ module.exports = {
     isOwner,
     isAdmin,
     hasAdminRole,
-    hasUserRole,
+    hasMemberRole,
     isCalledByClanMember,
     isCalledByClanAdmin,
     isTargetAllowed,
