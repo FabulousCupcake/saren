@@ -36,6 +36,9 @@ const linkFunc = async (interaction) => {
         ephemeral: true,
     });
 
+    // Tell discord that we ACK and reply will be late
+    interaction.deferReply({ ephemeral: true });
+
     const targetUser = interaction.options.getUser("target");
     const accountId = interaction.options.getString("id");
     const accountPassword = interaction.options.getString("password");
