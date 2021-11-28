@@ -1,6 +1,7 @@
 const { Client, Intents } = require("discord.js");
-const { createClient } = require("redis");
 
+const { initializeReditClient } = require("./pkg/redis/redis.js");
+const { initializeLambdaClient } = require("./pkg/lambda/lambda.js");
 const { linkFunc } = require("./pkg/commands/link");
 const { unlinkFunc } = require("./pkg/commands/unlink");
 const { statusFunc } = require("./pkg/commands/status");
@@ -11,7 +12,6 @@ const TOKEN = process.env.DISCORD_TOKEN;
 // const GUILD_ID = process.env.GUILD_ID;
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
-const redisClient = createClient(process.env.REDIS_URL);
 
 const readyHandler = () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -42,6 +42,8 @@ const handler = async (interaction) => {
 };
 
 const main = async () => {
+  initializeReditClient();
+  initializeLambdaClient();
   client.on("ready", readyHandler);
   client.on("interactionCreate", handler);
   client.login(TOKEN);
