@@ -43,6 +43,10 @@ const linkFunc = async (interaction) => {
     // TODO: Invoke Lambda Here
     // const result = suzume.invoke("register", [targetUser.id, accountId, accountPassword]);
     console.log("invoke", "register", targetUser.id, accountId, accountPassword);
+    interaction.reply({
+        content: `Invoke Lambda: register ${targetUser.id}, ${accountId}, ${accountPassword}`,
+        ephemeral: true,
+    })
 }
 
 const linkSubCommand = new SlashCommandSubcommandBuilder()

@@ -48,6 +48,10 @@ const statusFunc = async (interaction) => {
     // TODO: Invoke Lambda Here
     // const result = suzume.invoke("sync", [targetUser.id]);
     console.log("invoke", "check", targetUser.id);
+    interaction.reply({
+        content: `Invoke Lambda: check ${targetUser.id}`,
+        ephemeral: true,
+    })
 }
 
 const statusSubCommand = new SlashCommandSubcommandBuilder()

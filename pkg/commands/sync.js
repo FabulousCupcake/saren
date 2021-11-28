@@ -48,6 +48,10 @@ const syncFunc = async (interaction) => {
     // TODO: Invoke Lambda Here
     // const result = suzume.invoke("sync", [targetUser.id]);
     console.log("invoke", "sync", targetUser.id);
+    interaction.reply({
+        content: `Invoke Lambda: sync ${targetUser.id}`,
+        ephemeral: true,
+    })
 }
 
 const syncSubCommand = new SlashCommandSubcommandBuilder()

@@ -34,6 +34,10 @@ const unlinkFunc = async (interaction) => {
     // TODO: Invoke Lambda Here
     // const result = suzume.invoke("disable", [targetUser.id]);
     console.log("invoke", "disable", targetUser.id);
+    interaction.reply({
+        content: `Invoke Lambda: disable ${targetUser.id}`,
+        ephemeral: true,
+    })
 }
 
 const unlinkSubCommand = new SlashCommandSubcommandBuilder()
