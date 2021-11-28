@@ -37,7 +37,7 @@ const linkFunc = async (interaction) => {
     });
 
     const targetUser = interaction.options.getUser("target");
-    const accountId = interaction.options.getInteger("id");
+    const accountId = interaction.options.getString("id");
     const accountPassword = interaction.options.getString("password");
 
     // TODO: Invoke Lambda Here
