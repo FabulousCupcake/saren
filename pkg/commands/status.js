@@ -63,11 +63,18 @@ const statusFunc = async (interaction) => {
         return;
     }
 
-    const text = (responseBody) ? "do" : "don't";
+    if (requestBody) {
+        interaction.followUp({
+            content: `I have the account data for ${targetUser.tag} written down right here!`,
+            ephemeral: true,
+        });
+        return;
+    }
+
     interaction.followUp({
-        content: `I ${text} have account data for ${targetUser.tag}!`,
+        content: `Oh no! I don't have the account data for ${targetUser.tag}!`,
         ephemeral: true,
-    })
+    });
 }
 
 const statusSubCommand = new SlashCommandSubcommandBuilder()
