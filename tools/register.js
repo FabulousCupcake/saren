@@ -1,28 +1,72 @@
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
+const { REST } = require("@discordjs/rest");
+const { Routes } = require("discord-api-types/v9");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 
+const { AUTHORIZED_ROLES_LIST } = require("../pkg/acl/acl.js")
+const { linkSubCommand } = require("../pkg/commands/link.js");
+const { unlinkSubCommand } = require("../pkg/commands/unlink.js");
+const { statusSubCommand } = require("../pkg/commands/status.js");
+const { syncSubCommand } = require("../pkg/commands/sync.js");
+
+// Constants
 const TOKEN = process.env.DISCORD_TOKEN;
-const CLIENT_ID = process.env.CLIENT_ID;
-const GUILD_ID = process.env.GUILD_ID;
+const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
+const GUILD_ID = process.env.DISCORD_GUILD_ID;
+const COMMANDS = new SlashCommandBuilder()
+  .setName("saren")
+  .setDescription("Princess Connect! Re:Dive Credentials Management Bot")
+  .setDefaultPermission(false)
+  .addSubcommand(linkSubCommand)
+  .addSubcommand(unlinkSubCommand)
+  .addSubcommand(statusSubCommand)
+  .addSubcommand(syncSubCommand)
 
-const COMMANDS = [{
-  name: 'ping',
-  description: 'Replies with Pong!'
-}];
+const PERMISSIONS = {
 
+}
+
+// Globals
 const rest = new REST({ version: '9' }).setToken(TOKEN);
+
+// registerCommands registers command json and returns command id
+const registerCommands = async () => {
+  console.log("==> Command JSON:");
+  console.log(JSON.stringify(COMMANDS.toJSON(), null, 2));
+
+  console.log('==> Registering slash commands...');
+  const res = await rest.put(
+    Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
+    { body: [ COMMANDS.toJSON() ] },
+  );
+  console.log('==> Successfully registered slash commands!');
+
+  return res[0].id;
+};
+
+// adjustPermissions sets command permission
+const adjustPermissions = async (commandId) => {
+  const permission = {
+    type: 2, // 1 = User, 2 = Role
+    id: AUTHORIZED_ROLES_LIST.admin,
+    permission: true,
+  };
+
+  console.log("==> Adjusting slash command permission");
+  await rest.put(
+    Routes.applicationCommandPermissions(CLIENT_ID, GUILD_ID, commandId),
+    { body: [ permission ] },
+  );
+  console.log("==> Successfully adjusted slash command permissions!");
+};
+
+// Main
 (async () => {
+  // Register Commands
   try {
-    console.log('Refreshing application slash commands...');
-    console.log(JSON.stringify(COMMANDS, null, 2));
-
-    await rest.put(
-      Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
-      { body: COMMANDS },
-    );
-
-    console.log('Successfully registered application slash commands!');
+    const commandId = await registerCommands();
+    await adjustPermissions(commandId);
   } catch (error) {
     console.error(error);
+    throw error;
   }
 })();
