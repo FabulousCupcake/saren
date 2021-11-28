@@ -24,7 +24,10 @@ const checkPermissions = interaction => {
 
 const unlinkFunc = async (interaction) => {
     const { allowed, reason } = checkPermissions(interaction);
-    if (!allowed) return interaction.reply(reason);
+    if (!allowed) return interaction.reply({
+        content: reason,
+        ephemeral: true,
+    });
 
     const targetUser = interaction.options.getUser("target");
 
