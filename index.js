@@ -1,9 +1,10 @@
 const { Client, Intents } = require("discord.js");
 const { createClient } = require("redis");
-import link from "./pkg/commands/link";
-import unlink from "./pkg/commands/unlink";
-import status from "./pkg/commands/status";
-import sync from "./pkg/commands/sync";
+
+const link = require("./pkg/commands/link");
+const unlink = require("./pkg/commands/unlink");
+const status = require("./pkg/commands/status");
+const sync = require("./pkg/commands/sync");
 
 const TOKEN = process.env.DISCORD_TOKEN;
 // const CLIENT_ID = process.env.CLIENT_ID;
