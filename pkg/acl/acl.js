@@ -21,6 +21,9 @@ const AUTHORIZED_ROLES_LIST = {
 };
 
 const isCalledByOwner = interaction => {
+    console.log("ownersList", AUTHORIZED_USERS_LIST.owner)
+    console.log("callerid", interaction.user.id);
+    console.log("result", AUTHORIZED_USERS_LIST.owner.includes(interaction.user.id));
     if (AUTHORIZED_USERS_LIST.owner.includes(interaction.user.id)) return true;
 
     return false;
