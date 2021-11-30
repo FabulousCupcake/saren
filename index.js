@@ -9,7 +9,7 @@ const { linkFunc } = require("./pkg/commands/link");
 const { unlinkFunc } = require("./pkg/commands/unlink");
 const { statusFunc } = require("./pkg/commands/status");
 const { syncFunc } = require("./pkg/commands/sync");
-const { clanStatusFunc } = require("./pkg/commands/clanstatus");
+const { clanStatusFunc } = require("./pkg/commands/clan-status");
 
 const TOKEN = process.env.DISCORD_TOKEN;
 
