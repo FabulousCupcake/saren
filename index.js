@@ -21,7 +21,7 @@ const COMMAND_MAP = {
   clanstatus: clanStatusFunc,
 };
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS] });
 
 const readyHandler = () => console.log(`Logged in as ${client.user.tag}!`);
 
