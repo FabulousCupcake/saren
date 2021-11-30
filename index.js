@@ -4,10 +4,12 @@ const { initializeS3Client } = require("./pkg/s3/s3.js");
 const { initializeReditClient } = require("./pkg/redis/redis.js");
 const { initializeLambdaClient } = require("./pkg/lambda/lambda.js");
 const { initializeSpreadsheetClient } = require("./pkg/sheets/sheets.js");
+
 const { linkFunc } = require("./pkg/commands/link");
 const { unlinkFunc } = require("./pkg/commands/unlink");
 const { statusFunc } = require("./pkg/commands/status");
 const { syncFunc } = require("./pkg/commands/sync");
+const { clanStatusFunc } = require("./pkg/commands/clanstatus");
 
 const TOKEN = process.env.DISCORD_TOKEN;
 
@@ -16,6 +18,7 @@ const COMMAND_MAP = {
   unlink: unlinkFunc,
   status: statusFunc,
   sync: syncFunc,
+  clanstatus: clanStatusFunc,
 };
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
