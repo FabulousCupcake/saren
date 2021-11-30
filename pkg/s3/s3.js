@@ -15,10 +15,8 @@ const listStateFiles = async () => {
         Bucket: S3_BUCKET,
     });
     const response = await client.send(command);
-    console.log(response);
-    console.log(response.Contents);
     return response.Contents
-        .filter(id => id.match(/\d{17,}/))
+        .filter(content => content.Key.match(/\d{17,}/))
         .map(c => c.Key.replace(".json", ""))
 }
 
