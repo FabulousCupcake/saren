@@ -18,6 +18,8 @@ const COMMAND_MAP = {
   sync: syncFunc,
 };
 
+const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+
 const readyHandler = () => console.log(`Logged in as ${client.user.tag}!`);
 
 const handler = async (interaction) => {
@@ -49,7 +51,6 @@ const main = async () => {
   initializeLambdaClient();
   initializeSpreadsheetClient();
 
-  const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
   client.on("ready", readyHandler);
   client.on("interactionCreate", handler);
   client.login(TOKEN);
