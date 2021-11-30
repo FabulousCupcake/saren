@@ -10,36 +10,36 @@ const { statusFunc } = require("./pkg/commands/status");
 const { syncFunc } = require("./pkg/commands/sync");
 
 const TOKEN = process.env.DISCORD_TOKEN;
-// const CLIENT_ID = process.env.CLIENT_ID;
-// const GUILD_ID = process.env.GUILD_ID;
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
-
-const readyHandler = () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+const COMMAND_MAP = {
+  link: linkFunc,
+  unlink: unlinkFunc,
+  status: statusFunc,
+  sync: syncFunc,
 };
+
+const readyHandler = () => console.log(`Logged in as ${client.user.tag}!`);
 
 const handler = async (interaction) => {
   if (!interaction.isCommand()) return;
   if (interaction.commandName !== "saren") return;
 
   const command = interaction.options.getSubcommand();
+  const commandFunc = COMMAND_MAP[command];
 
-  switch(command) {
-    case "link":
-      await linkFunc(interaction);
-      break;
-    case "unlink":
-      await unlinkFunc(interaction);
-      break;
-    case "status":
-      await statusFunc(interaction);
-      break;
-    case "sync":
-      await syncFunc(interaction);
-      break;
-    default:
-      console.warn(`Unknown command: ${command}`);
+  if (!commandFunc) {
+    console.warn("Unknown command", command, interaction);
+    return;
+  }
+
+  // Tell discord that we ACKed
+  interaction.deferReply({ ephemeral: true });
+
+  try {
+    commandFunc(interaction);
+  } catch (err) {
+    interaction.followUp("Oops! Something went wrong!");
+    console.error(err, interaction);
   }
 };
 
@@ -48,6 +48,8 @@ const main = async () => {
   initializeReditClient();
   initializeLambdaClient();
   initializeSpreadsheetClient();
+
+  const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
   client.on("ready", readyHandler);
   client.on("interactionCreate", handler);
   client.login(TOKEN);

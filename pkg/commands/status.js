@@ -40,13 +40,11 @@ const checkPermissions = interaction => {
 
 const statusFunc = async (interaction) => {
     const { allowed, reason } = checkPermissions(interaction);
-    if (!allowed) return interaction.reply({
+    if (!allowed) return interaction.followUp({
         content: reason,
         ephemeral: true,
     });
 
-    // Tell discord that we ACK and reply will be late
-    interaction.deferReply({ ephemeral: true });
 
     const targetUser = interaction.options.getUser("target");
 

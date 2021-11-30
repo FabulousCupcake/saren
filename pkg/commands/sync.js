@@ -41,10 +41,15 @@ const checkPermissions = interaction => {
 
 const syncFunc = async (interaction) => {
     const { allowed, reason } = checkPermissions(interaction);
-    if (!allowed) return interaction.reply({
+    if (!allowed) return interaction.followUp({
         content: reason,
         ephemeral: true,
     });
+
+    // TODO: Clan battle toggle check
+    // Make it harder to accidantally sync during CB, requiring explicit approval/confirmation
+    // Either via Message Component button
+    //     or via required boolean (ehh)
 
     // Tell discord that we ACK and reply will be late
     interaction.deferReply({ ephemeral: true });
