@@ -43,7 +43,10 @@ const handler = async (interaction) => {
   try {
     commandFunc(interaction);
   } catch (err) {
-    interaction.followUp("Oops! Something went wrong!");
+    interaction.followUp({
+      content: "Oops! Something went wrong!",
+      ephemeral: true,
+    });
     console.error(err, interaction);
   }
 };
