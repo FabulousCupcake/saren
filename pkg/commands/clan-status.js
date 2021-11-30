@@ -42,6 +42,7 @@ const clanStatusFunc = async (interaction) => {
     // 1. Obtain ID of all discord users with Vanilla Member role
     if (!interaction.guild) await interaction.client.guilds.fetch(interaction.guildId);
     const members = (await interaction.guild.roles.fetch(AUTHORIZED_ROLES_LIST.member)).members;
+    console.log(members);
 
     // 2. Obtain all ID in S3 (listStateFiles)
     const suzumeList = await listStateFiles();
@@ -52,7 +53,7 @@ const clanStatusFunc = async (interaction) => {
         index += 1;
         const hasStateFile = suzumeList.includes(member.id);
         const symbol = (hasStateFile) ? ":white_check_mark:" : ":x:";
-        console.log(member.tag, hasStateFile, member.id);
+        console.log(hasStateFile, member.id);
 
         return `${symbol} ${index}. <@!${member.id}>`;
     });
