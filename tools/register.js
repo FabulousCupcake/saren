@@ -7,6 +7,7 @@ const { linkSubCommand } = require("../pkg/commands/link.js");
 const { unlinkSubCommand } = require("../pkg/commands/unlink.js");
 const { statusSubCommand } = require("../pkg/commands/status.js");
 const { syncSubCommand } = require("../pkg/commands/sync.js");
+const { clanStatusSubCommand } = require("../pkg/commands/clan-status.js");
 
 // Constants
 const TOKEN = process.env.DISCORD_TOKEN;
@@ -20,6 +21,7 @@ const COMMANDS = new SlashCommandBuilder()
   .addSubcommand(unlinkSubCommand)
   .addSubcommand(statusSubCommand)
   .addSubcommand(syncSubCommand)
+  .addSubcommand(clanStatusSubCommand)
 
 const PERMISSIONS = [
   ...AUTHORIZED_USERS_LIST.owner.map(id => ({
