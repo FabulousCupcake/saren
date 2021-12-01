@@ -42,7 +42,7 @@ const clanStatusFunc = async (interaction) => {
     // 1. Obtain ID of all discord users with Vanilla Member role
     if (!interaction.guild) await interaction.client.guilds.fetch(interaction.guildId);
     const allMembers = await interaction.guild.members.fetch({ force: true });
-    const clanMembers = allMembers.filter(member.roles.cache.includes(AUTHORIZED_ROLES_LIST.member));
+    const clanMembers = allMembers.filter(m => m.roles.cache.includes(AUTHORIZED_ROLES_LIST.member));
 
     // 2. Obtain all ID in S3 (listStateFiles)
     const suzumeList = await listStateFiles();
