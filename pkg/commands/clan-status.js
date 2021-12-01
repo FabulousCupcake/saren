@@ -4,12 +4,12 @@ const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, AUTHORIZED_R
 const { listStateFiles } = require("../s3/s3.js");
 
 const checkPermissions = interaction => {
-    // if (isCalledByOwner(interaction)) {
-    //     return {
-    //         allowed: true,
-    //         reason: "Caller is application owner",
-    //     };
-    // }
+    if (isCalledByOwner(interaction)) {
+        return {
+            allowed: true,
+            reason: "Caller is application owner",
+        };
+    }
 
     if (!isCalledByClanMember(interaction)) {
         return {
