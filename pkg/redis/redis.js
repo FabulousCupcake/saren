@@ -8,7 +8,17 @@ const initializeRedisClient = async () => {
     console.log("Successfully initialized Redis Client");
 }
 
+const setArmoryText = async (id, text) => {
+    const key = `armory-${id}`;
+    await redisClient.set(key, text);
+}
+
+const getArmoryText = async (id) => {
+    return await redisClient.get(key);
+}
+
 module.exports = {
-    redisClient,
     initializeRedisClient,
+    setArmoryText,
+    getArmoryText,
 }

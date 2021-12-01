@@ -1,7 +1,7 @@
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember } = require("../../acl/acl.js");
-const { redisClient } = require("../../redis/redis.js");
+const { setArmoryText } = require("../../redis/redis.js");
 
 const checkPermissions = interaction => {
     if (isCalledByOwner(interaction)) {
@@ -42,9 +42,7 @@ const importArmoryTextFunc = async (interaction) => {
         return;
     }
 
-    const key = `armory-${interaction.member.id}`;
-    console.log("redisClient", redisClient);
-    await redisClient.set(key, armoryText);
+    await setArmoryText(interaction.member.id, armoryText);
     interaction.followUp({
         content: "I've written down your armory text!",
         ephemeral: true,
