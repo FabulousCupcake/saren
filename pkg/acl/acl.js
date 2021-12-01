@@ -27,7 +27,6 @@ const isCalledByOwner = interaction => {
 }
 
 const isCalledByClanMember = interaction => {
-    console.log(interaction.member);
     if (interaction.member.roles.cache.has(AUTHORIZED_ROLES_LIST.member)) return true;
 
     return false
