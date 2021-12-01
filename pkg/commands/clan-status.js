@@ -48,10 +48,11 @@ const clanStatusFunc = async (interaction) => {
     const suzumeList = await listStateFiles();
 
     // 3. Compare and print explicitly who has it and who not, including number count to check if 30
-    const messages = clanMembers.map((member, index) => {
-        index += 1;
+    let index = 0;
+    const messages = clanMembers.map(member => {
+        index++;
         const hasStateFile = suzumeList.includes(member.id);
-        const symbol = (hasStateFile) ? ":white_check_mark:" : ":x:";
+        const symbol = (hasStateFile) ? "✅" : "❌";
 
         return `${symbol} ${index}. <@!${member.id}>`;
     });
