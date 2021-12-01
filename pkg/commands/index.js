@@ -15,7 +15,7 @@ const initializeCommands = client => {
     client.commands.set("status", statusFunc);
     client.commands.set("sync", syncFunc);
 
-    client.commands.set("armory", armoryGroupFunc);
+    client.commands.set("armorytext", armoryGroupFunc);
     client.commands.set("clan", clanGroupFunc);
 }
 
