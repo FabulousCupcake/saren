@@ -32,32 +32,32 @@ const generateArmoryTextFunc = async (interaction) => {
         ephemeral: true,
     });
 
-    // let responseBody;
-    // try {
-    //     const response = await login(targetUser.id);
-    //     responseBody = JSON.parse(Buffer.from(response.Payload).toString());
-    // } catch (err) {
-    //     console.error("Failed lambda call", err);
-    //     interaction.followUp({
-    //         content: "Uh oh! Looks like Suzume messed up!",
-    //         ephemeral: true,
-    //     });
-    //     return;
-    // }
+    let responseBody;
+    try {
+        const response = await login(targetUser.id);
+        responseBody = JSON.parse(Buffer.from(response.Payload).toString());
+    } catch (err) {
+        console.error("Failed lambda call", err);
+        interaction.followUp({
+            content: "Uh oh! Looks like Suzume messed up!",
+            ephemeral: true,
+        });
+        return;
+    }
 
-    // // If falsey, it means Suzume didn't find a state file associated with the discord user
-    // if (!responseBody) {
-    //     interaction.followUp({
-    //         content: `I don't have account data for ${targetUser.tag}!`,
-    //         ephemeral: true,
-    //     });
-    //     return;
-    // }
+    // If falsey, it means Suzume didn't find a state file associated with the discord user
+    if (!responseBody) {
+        interaction.followUp({
+            content: `I don't have account data for ${targetUser.tag}!`,
+            ephemeral: true,
+        });
+        return;
+    }
 
     const armoryTargetText = await getArmoryText(interaction.member.id);
-    // const armoryText = transformToArmorySerializationText(responseBody, armoryTargetText);
+    const armoryText = transformToArmorySerializationText(responseBody, armoryTargetText);
     interaction.followUp({
-        content: armoryTargetText,
+        content: armoryText,
         ephemeral: true,
     });
 }
