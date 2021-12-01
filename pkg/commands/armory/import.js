@@ -43,6 +43,7 @@ const importArmoryTextFunc = async (interaction) => {
     }
 
     const key = `armory-${interaction.member.id}`;
+    console.log("redisClient", redisClient);
     await redisClient.set(key, armoryText);
     interaction.followUp({
         content: "I've written down your armory text!",
