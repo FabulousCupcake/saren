@@ -2,7 +2,7 @@ const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember } = require("../../acl/acl.js");
 const { getArmoryText } = require("../../redis/redis.js");
-const { login } = require("../lambda/lambda.js");
+const { login } = require("../../lambda/lambda.js");
 const { transformToArmorySerializationText } = require("./armory.js");
 
 const checkPermissions = interaction => {
