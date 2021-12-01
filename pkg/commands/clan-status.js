@@ -41,18 +41,17 @@ const clanStatusFunc = async (interaction) => {
     // TODO
     // 1. Obtain ID of all discord users with Vanilla Member role
     if (!interaction.guild) await interaction.client.guilds.fetch(interaction.guildId);
-    const role = await interaction.guild.roles.fetch(AUTHORIZED_ROLES_LIST.member, { force: true });
+    const role = await interaction.guild.roles.fetch(AUTHORIZED_ROLES_LIST.member);
+    await role.fetch({ force: true });
 
     // 2. Obtain all ID in S3 (listStateFiles)
     const suzumeList = await listStateFiles();
-    console.log(suzumeList);
 
     // 3. Compare and print explicitly who has it and who not, including number count to check if 30
     const messages = role.members.map((member, index) => {
         index += 1;
         const hasStateFile = suzumeList.includes(member.id);
         const symbol = (hasStateFile) ? ":white_check_mark:" : ":x:";
-        console.log(hasStateFile, member.id);
 
         return `${symbol} ${index}. <@!${member.id}>`;
     });
