@@ -58,7 +58,7 @@ const generateArmoryTextFunc = async (interaction) => {
     const armoryTargetText = await getArmoryText(interaction.member.id);
     const armoryText = transformToArmorySerializationText(responseBody, armoryTargetText);
     interaction.followUp({
-        content: `\`\`\`${armoryText}\`\`\``,
+        content: `Thank you for waiting! Here you go!\n\`\`\`${armoryText}\`\`\``,
         ephemeral: true,
     });
 }
