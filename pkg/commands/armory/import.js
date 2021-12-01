@@ -19,8 +19,8 @@ const checkPermissions = interaction => {
     }
 
     return {
-        allowed: false,
-        reason: "You are not allowed to do this!"
+        allowed: true,
+        reason: "Caller can only be self"
     }
 };
 
