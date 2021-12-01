@@ -14,6 +14,7 @@ const setArmoryText = async (id, text) => {
 }
 
 const getArmoryText = async (id) => {
+    const key = `armory-${id}`;
     return await redisClient.get(key);
 }
 
