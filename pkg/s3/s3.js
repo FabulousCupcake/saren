@@ -6,6 +6,7 @@ let client;
 
 const initializeS3Client = () => {
     client = new S3Client({ region: "eu-west-1" });
+    console.log("Successfully initialized S3 Client");
 };
 
 // listStateFiles returns array of discord id in the s3 bucket

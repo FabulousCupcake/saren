@@ -10,6 +10,7 @@ const initializeLambdaClient = () => {
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
         region: 'eu-west-1',
     });
+    console.log("Successfully initialized Lambda Client");
 };
 
 const send = async (command, args) => {

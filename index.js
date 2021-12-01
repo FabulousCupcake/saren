@@ -44,7 +44,7 @@ const handler = async (interaction) => {
 
 const main = async () => {
   initializeS3Client();
-  initializeRedisClient();
+  await initializeRedisClient();
   initializeLambdaClient();
   initializeSpreadsheetClient();
   initializeCommands(client);
