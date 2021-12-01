@@ -16,11 +16,15 @@ const handler = async (interaction) => {
   if (!interaction.isCommand()) return;
   if (interaction.commandName !== "saren") return;
 
-  const command = interaction.options.getSubcommand();
+  const subcommand = interaction.options.getSubcommand();
+  const subcommandGroup = interaction.options.getSubcommandGroup();
+
+  // If subcommandgroup exists, prioritize resolving that
+  const command = subcommandGroup || subcommand;
   const commandFunc = client.commands.get(command);
 
   if (!commandFunc) {
-    console.warn("Unknown command", command, interaction);
+    console.warn("Unknown command", subcommand, interaction);
     return;
   }
 
