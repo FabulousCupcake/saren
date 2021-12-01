@@ -17,7 +17,7 @@ const handler = async (interaction) => {
   if (interaction.commandName !== "saren") return;
 
   const subcommand = interaction.options.getSubcommand();
-  const subcommandGroup = interaction.options.getSubcommandGroup();
+  const subcommandGroup = interaction.options.getSubcommandGroup(false);
 
   // If subcommandgroup exists, prioritize resolving that
   const command = subcommandGroup || subcommand;
