@@ -51,9 +51,6 @@ const syncFunc = async (interaction) => {
     // Either via Message Component button
     //     or via required boolean (ehh)
 
-    // Tell discord that we ACK and reply will be late
-    interaction.deferReply({ ephemeral: true });
-
     const targetUser = interaction.options.getUser("target");
 
     let responseBody;
