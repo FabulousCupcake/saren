@@ -1,7 +1,7 @@
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
-const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, AUTHORIZED_ROLES_LIST } = require("../acl/acl.js");
-const { listStateFiles } = require("../s3/s3.js");
+const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, AUTHORIZED_ROLES_LIST } = require("../../acl/acl.js");
+const { listStateFiles } = require("../../s3/s3.js");
 
 const checkPermissions = interaction => {
     if (isCalledByOwner(interaction)) {
@@ -64,7 +64,7 @@ const clanStatusFunc = async (interaction) => {
 }
 
 const clanStatusSubCommand = new SlashCommandSubcommandBuilder()
-    .setName("clanstatus")
+    .setName("status")
     .setDescription("Check the link status of all clan members")
 
 module.exports = {

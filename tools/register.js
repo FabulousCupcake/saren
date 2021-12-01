@@ -7,8 +7,8 @@ const { linkSubCommand } = require("../pkg/commands/link.js");
 const { unlinkSubCommand } = require("../pkg/commands/unlink.js");
 const { statusSubCommand } = require("../pkg/commands/status.js");
 const { syncSubCommand } = require("../pkg/commands/sync.js");
-const { clanStatusSubCommand } = require("../pkg/commands/clan-status.js");
-const { armorySubcommandGroup } = require("../pkg/commands/armory/index.js");
+const { clanSubcommandGroup } = require("../pkg/commands/clan");
+const { armorySubcommandGroup } = require("../pkg/commands/armory");
 
 // Constants
 const TOKEN = process.env.DISCORD_TOKEN;
@@ -22,7 +22,7 @@ const COMMANDS = new SlashCommandBuilder()
   .addSubcommand(unlinkSubCommand)
   .addSubcommand(statusSubCommand)
   .addSubcommand(syncSubCommand)
-  .addSubcommand(clanStatusSubCommand)
+  .addSubcommandGroup(clanSubcommandGroup)
   .addSubcommandGroup(armorySubcommandGroup)
 
 const PERMISSIONS = [
