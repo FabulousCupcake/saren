@@ -2,11 +2,11 @@ const { createClient } = require("redis");
 
 let redisClient;
 
-const initializeReditClient = () => {
+const initializeRedisClient = () => {
     redisClient = createClient(process.env.REDIS_URL);
 }
 
 module.exports = {
     redisClient,
-    initializeReditClient,
+    initializeRedisClient,
 }

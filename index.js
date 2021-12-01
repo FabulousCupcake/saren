@@ -1,7 +1,7 @@
 const { Client, Intents } = require("discord.js");
 
 const { initializeS3Client } = require("./pkg/s3/s3.js");
-const { initializeReditClient } = require("./pkg/redis/redis.js");
+const { initializeRedisClient } = require("./pkg/redis/redis.js");
 const { initializeLambdaClient } = require("./pkg/lambda/lambda.js");
 const { initializeSpreadsheetClient } = require("./pkg/sheets/sheets.js");
 
@@ -53,7 +53,7 @@ const handler = async (interaction) => {
 
 const main = async () => {
   initializeS3Client();
-  initializeReditClient();
+  initializeRedisClient();
   initializeLambdaClient();
   initializeSpreadsheetClient();
 
