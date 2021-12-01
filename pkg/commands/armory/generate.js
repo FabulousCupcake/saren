@@ -35,7 +35,7 @@ const generateArmoryTextFunc = async (interaction) => {
 
     let responseBody;
     try {
-        const response = await login(targetUser.id);
+        const response = await login(interaction.member.id);
         responseBody = JSON.parse(Buffer.from(response.Payload).toString());
     } catch (err) {
         console.error("Failed lambda call", err);
@@ -49,7 +49,7 @@ const generateArmoryTextFunc = async (interaction) => {
     // If falsey, it means Suzume didn't find a state file associated with the discord user
     if (!responseBody) {
         interaction.followUp({
-            content: `I don't have account data for ${targetUser.tag}!`,
+            content: `I don't have account data for ${interaction.member.user.tag}!`,
             ephemeral: true,
         });
         return;
