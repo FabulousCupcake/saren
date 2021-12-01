@@ -21,17 +21,22 @@ const EQUIP_RARITY_MAP = [HEART, BLUE, BRONZE, SILVER, GOLD, PURPLE, RED, GREEN]
 
 // parseTargetRankData returns a simple id:target map from another armoryText data
 const parseTargetRankData = (armoryText) => {
-  const text = Buffer.from(armoryText, 'base64');
-  const data = zlib.gunzipSync(text).toString('utf8');
-  const json = JSON.parse(data);
-  const units = json[0];
+  try {
+    const text = Buffer.from(armoryText, 'base64');
+    const data = zlib.gunzipSync(text).toString('utf8');
+    const json = JSON.parse(data);
+    const units = json[0];
 
-  const targetRankMap = {};
-  units.forEach((u) => {
-    targetRankMap[u.u] = u.t;
-  });
+    const targetRankMap = {};
+    units.forEach((u) => {
+      targetRankMap[u.u] = u.t;
+    });
 
-  return targetRankMap;
+    return targetRankMap;
+  } catch {
+    console.warn("Failed parsing armorytext", armoryText);
+    return {};
+  }
 };
 
 // transformUnitList transforms ingame .data.unit_list to armory serialized list
