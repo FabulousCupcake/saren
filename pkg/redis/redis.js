@@ -32,8 +32,8 @@ const initializeRedisClient = async () => {
     // redisClient.on("error", err => console.log('Redis Client Error', err));
     // await redisClient.connect(); // only needed in redis@v4
 
-    asyncGet = promisify(client.get).bind(client);
-    asyncSet = promisify(client.set).bind(client);
+    asyncGet = promisify(redisClient.get).bind(redisClient);
+    asyncSet = promisify(redisClient.set).bind(redisClient);
 
     console.log("Successfully initialized Redis Client");
 }
