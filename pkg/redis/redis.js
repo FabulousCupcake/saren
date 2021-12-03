@@ -47,14 +47,17 @@ const getArmoryText = async (id) => {
     return await asyncGet(key);
 }
 
-const setUserData = async (id, text) => {
+const setUserData = async (id, data) => {
+    const text = JSON.stringify(data);
     const key = `userdata-${id}`;
     await asyncSet(key, text);
 }
 
 const getUserData = async (id) => {
     const key = `userdata-${id}`;
-    return await asyncGet(key);
+    const data = await asyncGet(key);
+    const text = JSON.parse(data);
+    return text;
 }
 
 const setUserSyncTimestamp = async (id, text) => {
