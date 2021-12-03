@@ -7,7 +7,7 @@ const units = [
     ['second', 1000],
 ]
 
-const rtf = new Intl.RelativeTimeFormat('en', { style:'narrow'});
+const rtf = new Intl.RelativeTimeFormat('en');
 const relatime = elapsed => {
     for (const [unit, amount] of units) {
         if (Math.abs(elapsed) > amount || unit === 'second') {

@@ -2,7 +2,7 @@ const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
 const { updateSpreadsheet } = require("../sheets/sheets.js");
-const { setArmoryText } = require("../redis/redis.js");
+const { setArmoryText, setUserSyncTimestamp } = require("../redis/redis.js");
 const { login } = require("../lambda/lambda.js");
 
 const checkPermissions = interaction => {
@@ -89,7 +89,8 @@ const syncFunc = async (interaction) => {
     }
 
     // Save to redis
-    await setArmoryText(targetUser, responseBody);
+    await setArmoryText(targetUser.id, responseBody);
+    await setUserSyncTimestamp(targetUser.id, new Date().getTime());
 
     // Report back successful update
     const username = responseBody.user_info.user_name;

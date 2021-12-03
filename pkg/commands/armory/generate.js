@@ -1,7 +1,8 @@
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember } = require("../../acl/acl.js");
-const { getArmoryText, getUserData } = require("../../redis/redis.js");
+const { getArmoryText, getUserData, getUserSyncTimestamp } = require("../../redis/redis.js");
+const { relatime } = require("../../utils/format.js");
 const { transformToArmorySerializationText } = require("./armory.js");
 
 const checkPermissions = interaction => {
@@ -32,6 +33,7 @@ const generateArmoryTextFunc = async (interaction) => {
         ephemeral: true,
     });
 
+    // Fetch last sync response body
     const responseBody = await getUserData(interaction.member.id);
     if (!responseBody) {
         interaction.followUp({
@@ -41,10 +43,18 @@ const generateArmoryTextFunc = async (interaction) => {
         return;
     }
 
+    // Get last sync timestamp and transform into relative time format
+    const currentTimestamp = new Date().getTime();
+    const lastSyncTimestamp = await getUserSyncTimestamp(interaction.member.id);
+    const timeText = relatime(lastSyncTimestamp - currentTimestamp);
+
+    // Generate armory text
     const armoryTargetText = await getArmoryText(interaction.member.id);
     const armoryText = transformToArmorySerializationText(responseBody, armoryTargetText);
+
+    // Reply
     interaction.followUp({
-        content: `Here you go!\n\`\`\`${armoryText}\`\`\``,
+        content: `I found your data from ${timeText}! Here you go! \n\`\`\`${armoryText}\`\`\``,
         ephemeral: true,
     });
 }
