@@ -1,8 +1,7 @@
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember } = require("../../acl/acl.js");
-const { getArmoryText } = require("../../redis/redis.js");
-const { login } = require("../../lambda/lambda.js");
+const { getArmoryText, getUserData } = require("../../redis/redis.js");
 const { transformToArmorySerializationText } = require("./armory.js");
 
 const checkPermissions = interaction => {
@@ -33,23 +32,10 @@ const generateArmoryTextFunc = async (interaction) => {
         ephemeral: true,
     });
 
-    let responseBody;
-    try {
-        const response = await login(interaction.member.id);
-        responseBody = JSON.parse(Buffer.from(response.Payload).toString());
-    } catch (err) {
-        console.error("Failed lambda call", err);
-        interaction.followUp({
-            content: "Uh oh! Looks like Suzume messed up!",
-            ephemeral: true,
-        });
-        return;
-    }
-
-    // If falsey, it means Suzume didn't find a state file associated with the discord user
+    const responseBody = await getUserData(interaction.member.id);
     if (!responseBody) {
         interaction.followUp({
-            content: `I don't have account data for ${interaction.member.user.tag}!`,
+            content: "I can't find your data! Please run sync first and try again!",
             ephemeral: true,
         });
         return;
@@ -58,7 +44,7 @@ const generateArmoryTextFunc = async (interaction) => {
     const armoryTargetText = await getArmoryText(interaction.member.id);
     const armoryText = transformToArmorySerializationText(responseBody, armoryTargetText);
     interaction.followUp({
-        content: `Thank you for waiting! Here you go!\n\`\`\`${armoryText}\`\`\``,
+        content: `Here you go!\n\`\`\`${armoryText}\`\`\``,
         ephemeral: true,
     });
 }
