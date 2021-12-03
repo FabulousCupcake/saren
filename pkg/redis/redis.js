@@ -5,7 +5,6 @@ let redisClient;
 let asyncGet;
 let asyncSet;
 
-
 const initializeRedisClient = async () => {
     redisClient = createClient({
         url: process.env.REDIS_URL,
@@ -48,8 +47,20 @@ const getArmoryText = async (id) => {
     return await asyncGet(key);
 }
 
+const setUserData = async (id, text) => {
+    const key = `userdata-${id}`;
+    await asyncSet(key, text);
+}
+
+const getUserData = async (id) => {
+    const key = `userdata-${id}`;
+    return await asyncGet(key);
+}
+
 module.exports = {
     initializeRedisClient,
     setArmoryText,
     getArmoryText,
+    setUserData,
+    getUserData,
 }

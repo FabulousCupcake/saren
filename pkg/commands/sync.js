@@ -2,6 +2,7 @@ const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
 const { updateSpreadsheet } = require("../sheets/sheets.js");
+const { setArmoryText } = require("../redis/redis.js");
 const { login } = require("../lambda/lambda.js");
 
 const checkPermissions = interaction => {
@@ -86,6 +87,9 @@ const syncFunc = async (interaction) => {
         });
         return;
     }
+
+    // Save to redis
+    await setArmoryText(targetUser, responseBody);
 
     // Report back successful update
     const username = responseBody.user_info.user_name;
