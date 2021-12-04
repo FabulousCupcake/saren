@@ -51,7 +51,7 @@ const clanStatusFunc = async (interaction) => {
 
     // 3. Compare and print explicitly who has it and who not, including number count to check if 30
     let index = 0;
-    const messages = await clanMembers.map(async (member) => {
+    const messages = await Promise.all(clanMembers.map(async (member) => {
         index++;
         const message = [];
 
@@ -72,7 +72,7 @@ const clanStatusFunc = async (interaction) => {
         }
 
         return message.join(" ");
-    });
+    }));
 
     interaction.followUp({
         content: await messages.join("\n"),
