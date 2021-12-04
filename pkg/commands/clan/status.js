@@ -50,6 +50,7 @@ const clanStatusFunc = async (interaction) => {
     const suzumeList = await listStateFiles();
 
     // 3. Compare and print explicitly who has it and who not, including number count to check if 30
+    const currentTimestamp = new Date().getTime();
     let index = 0;
     const messages = await Promise.all(clanMembers.map(async (member) => {
         index++;
@@ -60,12 +61,12 @@ const clanStatusFunc = async (interaction) => {
 
         message.push(symbol);
         message.push(`${index}.`);
-        message.push(`<@!${member.id}`);
+        message.push(`<@!${member.id}>`);
 
         const lastSyncTimestamp = await getUserSyncTimestamp(member.id);
         if (hasStateFile) {
             if (lastSyncTimestamp) {
-                message.push(`(${relatime(lastSyncTimestamp)})`);
+                message.push(`(${relatime(lastSyncTimestamp - currentTimestamp)})`);
             } else {
                 message.push("(I'm not sure when!)");
             }
