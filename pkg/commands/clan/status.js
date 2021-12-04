@@ -75,7 +75,7 @@ const clanStatusFunc = async (interaction) => {
     });
 
     interaction.followUp({
-        content: messages.join("\n"),
+        content: await messages.join("\n"),
         ephemeral: true,
     });
 }
