@@ -1,7 +1,9 @@
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, AUTHORIZED_ROLES_LIST } = require("../../acl/acl.js");
+const { getUserSyncTimestamp } = require("../../redis/redis.js");
 const { listStateFiles } = require("../../s3/s3.js");
+const { relatime } = require("../../utils/format.js");
 
 const checkPermissions = interaction => {
     if (isCalledByOwner(interaction)) {
@@ -51,10 +53,25 @@ const clanStatusFunc = async (interaction) => {
     let index = 0;
     const messages = clanMembers.map(member => {
         index++;
+        const message = [];
+
         const hasStateFile = suzumeList.includes(member.id);
         const symbol = (hasStateFile) ? "✅" : "❌";
 
-        return `${symbol} ${index}. <@!${member.id}>`;
+        message.push(symbol);
+        message.push(`${index}.`);
+        message.push(`<@!${member.id}`);
+
+        const lastSyncTimestamp = await getUserSyncTimestamp(member.id);
+        if (hasStateFile) {
+            if (lastSyncTimestamp) {
+                message.push(`(${relatime(lastSyncTimestamp)})`);
+            } else {
+                message.push("(I'm not sure when!)");
+            }
+        }
+
+        return message.join(" ");
     });
 
     interaction.followUp({
