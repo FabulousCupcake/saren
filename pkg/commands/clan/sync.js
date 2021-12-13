@@ -78,7 +78,8 @@ const clanSyncFunc = async (interaction) => {
 
     // 3. Start looping through each clanmember
     for (const member of clanMembers) {
-        console.log(member);
+        const memberId = member[0]; // Using for of returns a very weird… thing
+        console.log(await member.id);
         console.log(status);
         status[member.id] = STATUS_LOADING;
         await interaction.editReply(generateDashboardText());
@@ -119,7 +120,7 @@ const clanSyncFunc = async (interaction) => {
         //     return;
         // }
 
-        await setTimeout(4000);
+        await setTimeout(2000);
 
         // 3.5 Finally done
         status[member.id] = STATUS_DONE;
