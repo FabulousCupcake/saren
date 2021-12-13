@@ -7,8 +7,9 @@ const { login } = require("../../lambda/lambda.js");
 
 const STATUS_UNKNOWN = "❓";
 const STATUS_LOADING = "⚙️";
+const STATUS_FAILED = "❌";
 const STATUS_DONE = "✅";
-const STATUS_SKIP = "❌";
+const STATUS_SKIP = "⏩";
 
 const checkPermissions = interaction => {
     if (isCalledByOwner(interaction)) {
@@ -77,6 +78,8 @@ const clanSyncFunc = async (interaction) => {
 
     // 3. Start looping through each clanmember
     for (const member of clanMembers) {
+        console.log(member);
+        console.log(status);
         status[member.id] = STATUS_LOADING;
         await interaction.editReply(generateDashboardText());
 
