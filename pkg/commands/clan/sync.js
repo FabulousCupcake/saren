@@ -76,7 +76,7 @@ const clanSyncFunc = async (interaction) => {
     });
 
     // 3. Start looping through each clanmember
-    await clanMembers.forEach(async (member) => {
+    for (const member of clanMembers) {
         status[member.id] = STATUS_LOADING;
         await interaction.editReply(generateDashboardText());
 
@@ -120,7 +120,7 @@ const clanSyncFunc = async (interaction) => {
 
         // 3.5 Finally done
         status[member.id] = STATUS_DONE;
-    });
+    }
 
     interaction.followUp({
         content: "I'm finished!",
