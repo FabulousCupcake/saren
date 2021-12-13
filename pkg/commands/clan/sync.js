@@ -71,15 +71,15 @@ const clanSyncFunc = async (interaction) => {
     };
 
     // 2. Send initial message
-    interaction.followUp({
+    await interaction.followUp({
         content: generateDashboardText(),
         ephemeral: true,
     });
 
     // 3. Start looping through each clanmember
-    clanMembers.forEach(async (member) => {
+    await clanMembers.forEach(async (member) => {
         status[member.id] = STATUS_LOADING;
-        interaction.editReply(generateDashboardText());
+        await interaction.editReply(generateDashboardText());
 
         // 3.1 Login
         // let responseBody;
