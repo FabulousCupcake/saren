@@ -1,7 +1,9 @@
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
+const { getUserSyncTimestamp } = require("../redis/redis.js");
 const { hasStateFile } = require("../s3/s3.js");
+const { relatime } = require("../utils/format.js");
 
 const checkPermissions = interaction => {
     if (isCalledByOwner(interaction)) {
@@ -45,21 +47,34 @@ const statusFunc = async (interaction) => {
         ephemeral: true,
     });
 
-
+    // Check if we have the user's state file
     const targetUser = interaction.options.getUser("target");
-
     const stateFileExists = await hasStateFile(targetUser.id);
 
-    if (stateFileExists) {
+    // We don't
+    if (!stateFileExists) {
         interaction.followUp({
-            content: `I have the account data for ${targetUser.tag} written down right here!`,
+            content: `Oh no! I don't have the account data for ${targetUser.tag}!`,
             ephemeral: true,
         });
         return;
     }
 
+    // Compute last update time
+    const currentTimestamp = new Date().getTime();
+    const lastSyncTimestamp = await getUserSyncTimestamp(targetUser.id);
+    let timestamp = "";
+    if (hasStateFile) {
+        if (lastSyncTimestamp) {
+            message = `(from ${relatime(lastSyncTimestamp - currentTimestamp)})`;
+        } else {
+            message = "(I'm not sure when!)";
+        }
+    }
+
+    // Send message
     interaction.followUp({
-        content: `Oh no! I don't have the account data for ${targetUser.tag}!`,
+        content: `I have the account data for ${targetUser.tag} written down right here ${timestamp}!`,
         ephemeral: true,
     });
 }
