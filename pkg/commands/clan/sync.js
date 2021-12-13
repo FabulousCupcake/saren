@@ -123,7 +123,7 @@ const clanSyncFunc = async (interaction) => {
         await setTimeout(2000);
 
         // 3.5 Finally done
-        status[member.id] = STATUS_DONE;
+        status[memberId] = STATUS_DONE;
     }
 
     interaction.followUp({
