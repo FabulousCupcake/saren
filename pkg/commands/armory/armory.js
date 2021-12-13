@@ -59,6 +59,7 @@ const transformUnitList = (units, armoryTargetText) => {
   // Find all target units the user does not own
   // These should be retained, with the unit data set to all minimum (rank 1, level 1, …)
   Object.keys(targetData).filter(t => units.find(u => u.u == t)).forEach(t => {
+    console.log("Found unowned unit with target rank", t);
     result.push({
       u: t,
       e: "000000",
