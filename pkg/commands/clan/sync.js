@@ -55,9 +55,8 @@ const clanSyncFunc = async (interaction) => {
     // We print this on start of each loop
     const status = {};
     const generateDashboardText = () => {
-        const message = [];
         let index = 0;
-        clanMembers.forEach(member => {
+        const message = clanMembers.map(member => {
             index += 1;
             const line = [];
             const statusSymbol = status[member.id] || STATUS_UNKNOWN;
