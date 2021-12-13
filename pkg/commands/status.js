@@ -66,9 +66,9 @@ const statusFunc = async (interaction) => {
     let timestamp = "";
     if (hasStateFile) {
         if (lastSyncTimestamp) {
-            message = `(from ${relatime(lastSyncTimestamp - currentTimestamp)})`;
+            timestamp = `(from ${relatime(lastSyncTimestamp - currentTimestamp)})`;
         } else {
-            message = "(I'm not sure when!)";
+            timestamp = "(I'm not sure when!)";
         }
     }
 
