@@ -76,9 +76,13 @@ const clanSyncFunc = async (interaction) => {
         ephemeral: true,
     });
 
-    // 3. Start looping through each clanmember
-    for (const member of clanMembers) {
-        const memberId = member[0]; // Using for of returns a very weird… thing
+    // 3. Start looping through each clanmember, in randomized order
+    const memberIds = clanMembers
+        .map(m => m.id)
+        .map(x => ({ v: x, s: Math.random() }))
+        .sort((a, b) => a.s - b.s)
+        .map(({ v }) => v);
+    for (const memberId of memberIds) {
         console.log("Updating", memberId);
         status[memberId] = STATUS_LOADING;
         await interaction.editReply(generateDashboardText());
