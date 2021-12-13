@@ -1,15 +1,18 @@
 const { SlashCommandSubcommandGroupBuilder } = require("@discordjs/builders");
 
 const { clanStatusFunc, clanStatusSubCommand } = require("./status.js");
+const { clanSyncFunc, clanSyncSubCommand } = require("./sync.js");
 
 const COMMAND_MAP = {
     status: clanStatusFunc,
+    sync: clanSyncFunc,
 };
 
 const clanSubcommandGroup = new SlashCommandSubcommandGroupBuilder()
     .setName("clan")
     .setDescription("Clan-wide commands")
     .addSubcommand(clanStatusSubCommand)
+    .addSubcommand(clanSyncSubCommand)
 
 const clanGroupFunc = async (interaction) => {
     const subcommandGroup = interaction.options.getSubcommandGroup();
