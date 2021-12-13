@@ -91,13 +91,13 @@ const clanSyncFunc = async (interaction) => {
         } catch (err) {
             console.error("Failed lambda call", err);
             status[memberId] = STATUS_FAILED;
-            return;
+            continue;
         }
 
         // 3.2 Skip if no data or failed
         if (!responseBody) {
             status[memberId] = STATUS_SKIP;
-            return;
+            continue;
         }
 
         // 3.3 Push to Sheets
@@ -106,7 +106,7 @@ const clanSyncFunc = async (interaction) => {
         } catch (err) {
             console.error("Failed updating spreadsheet", err);
             status[memberId] = STATUS_FAILED;
-            return;
+            continue;
         }
 
         // 3.4 Save to redis
@@ -116,7 +116,7 @@ const clanSyncFunc = async (interaction) => {
         } catch (err) {
             console.error("Failed updating redis", err);
             status[memberId] = STATUS_FAILED;
-            return;
+            continue;
         }
 
         // 3.5 Finally done
