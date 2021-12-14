@@ -22,7 +22,7 @@ const checkPermissions = interaction => {
 
     return {
         allowed: true,
-        reason: "Caller can only be self"
+        reason: "Can be called by any clan member against anyone"
     }
 };
 
@@ -33,8 +33,11 @@ const generateArmoryTextFunc = async (interaction) => {
         ephemeral: true,
     });
 
+    // Determine target
+    const targetUser = interaction.options.getUser("target") || interaction.member;
+
     // Fetch last sync response body
-    const responseBody = await getUserData(interaction.member.id);
+    const responseBody = await getUserData(targetUser.id);
     if (!responseBody) {
         interaction.followUp({
             content: "I can't find your data! Please run sync first and try again!",
@@ -45,11 +48,11 @@ const generateArmoryTextFunc = async (interaction) => {
 
     // Get last sync timestamp and transform into relative time format
     const currentTimestamp = new Date().getTime();
-    const lastSyncTimestamp = await getUserSyncTimestamp(interaction.member.id);
+    const lastSyncTimestamp = await getUserSyncTimestamp(targetUser.id);
     const timeText = relatime(lastSyncTimestamp - currentTimestamp);
 
     // Generate armory text
-    const armoryTargetText = await getArmoryText(interaction.member.id);
+    const armoryTargetText = await getArmoryText(targetUser.id);
     const armoryText = transformToArmorySerializationText(responseBody, armoryTargetText);
 
     // Reply
@@ -62,6 +65,11 @@ const generateArmoryTextFunc = async (interaction) => {
 const generateArmoryTextSubCommand = new SlashCommandSubcommandBuilder()
     .setName("generate")
     .setDescription("Generates pcredivewiki.tw armory import text.")
+    .addUserOption(option =>
+        option
+        .setName("target")
+        .setDescription("The discord user whose account should be synchronized")
+        .setRequired(false))
 
 module.exports = {
     generateArmoryTextFunc,
