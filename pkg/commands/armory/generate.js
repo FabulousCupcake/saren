@@ -57,7 +57,7 @@ const generateArmoryTextFunc = async (interaction) => {
 
     // Reply
     interaction.followUp({
-        content: `Here you go! \n\`\`\`${armoryText}\`\`\`\nIt was from ${timeText}! H`,
+        content: `Here you go! \n\`\`\`${armoryText}\`\`\`\nThis data was from ${timeText}!`,
         ephemeral: true,
     });
 }
