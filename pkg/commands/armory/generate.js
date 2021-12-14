@@ -68,7 +68,7 @@ const generateArmoryTextSubCommand = new SlashCommandSubcommandBuilder()
     .addUserOption(option =>
         option
         .setName("target")
-        .setDescription("The discord user whose account should be synchronized")
+        .setDescription("The discord user whose account data should be exported")
         .setRequired(false))
 
 module.exports = {
