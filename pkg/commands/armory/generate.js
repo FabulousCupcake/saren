@@ -28,7 +28,9 @@ const checkPermissions = interaction => {
     }
 };
 
-const generateShortURL = armoryText => {
+// generateShortURL sends a request to pcredivewiki to save armorytext
+const generateShortURL = async (armoryText) => {
+    // weirdly enough **we** decide the uuid, 8 characters length, hex characters
     const generateUUID = () => {
         let uuid = "";
         while (uuid.length < 8) {
@@ -39,28 +41,31 @@ const generateShortURL = armoryText => {
     };
     const uuid = generateUUID();
 
-    const payload = JSON.stringify({
-        teamList: armoryText,
-        uuid: uuid,
-    });
+    // Build x-www-form-urlencoded payload
+    const usp = new URLSearchParams()
+    usp.append("teamList", armoryText);
+    usp.append("uuid", uuid);
+    const payload = encodeURI(usp.toString());
 
+    // Build https options
     const options = {
         hostname: "pcredivewiki.tw",
-        port: 443,
         path: "/static/php/mysqlAdd.php",
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
             "Content-Length": payload.length,
         },
-        timeout: 3000,
     };
 
     const promise = new Promise((resolve, reject) => {
         const req = https.request(options, res => {
-            res.on("end", () => resolve(`https://pcredivewiki.tw/Armory?s=${uuid}`));
+            res.on("end", () => {
+                if (res.statusCode != 200) reject();
+                resolve(`https://pcredivewiki.tw/Armory?s=${uuid}`);
+            });
         });
-        req.on("error", () => reject(""));
+        req.on("error", err => reject(err));
         req.write(payload);
         req.end();
     });
@@ -97,18 +102,8 @@ const generateArmoryTextFunc = async (interaction) => {
     const armoryTargetText = await getArmoryText(targetUser.id);
     const armoryText = transformToArmorySerializationText(responseBody, armoryTargetText);
 
-    // Try to make short URL
-    // const shortURL = await generateShortURL(armoryText);
-    const shortURL = "https://google.com"
-
-    // Build embed
-    const messageEmbed = new MessageEmbed()
-        .setAuthor(targetUser.username, targetUser.avatarURL())
-        .setDescription(armoryText)
-        .setColor("F55291")
-        .setFooter(`Generated with data from ${timestamp}`);
-
-    // Build message commponent
+    // Build message component
+    const shortURL = await generateShortURL(armoryText);
     const components = [];
     if (shortURL) {
         const component = new MessageButton()
@@ -118,6 +113,13 @@ const generateArmoryTextFunc = async (interaction) => {
         const componentRow = new MessageActionRow().addComponents(component);
         components.push(componentRow)
     }
+
+    // Build embed
+    const messageEmbed = new MessageEmbed()
+        .setAuthor(targetUser.username, targetUser.avatarURL())
+        .setDescription(armoryText)
+        .setColor("F55291")
+        .setFooter(`Generated with data from ${timestamp}`);
 
     // Send reply
     interaction.followUp({
