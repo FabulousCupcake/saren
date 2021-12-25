@@ -45,7 +45,7 @@ const generateShortURL = armoryText => {
     const usp = new URLSearchParams()
     usp.append("teamList", armoryText);
     usp.append("uuid", uuid);
-    const payload = encodeURI(usp.toString());
+    const payload = usp.toString();
 
     // Build https options
     const options = {
