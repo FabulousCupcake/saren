@@ -62,9 +62,8 @@ const generateShortURL = armoryText => {
     console.log("returning promise");
     return new Promise((resolve, reject) => {
         const req = https.request(options, res => {
-            res.on("end", () => {
-                resolve(`https://pcredivewiki.tw/Armory?s=${uuid}`);
-            });
+            if (res.statusCode != "200") reject();
+            resolve(`https://pcredivewiki.tw/Armory?s=${uuid}`);
         });
         req.on("error", err => {
             console.error(err);
@@ -75,8 +74,7 @@ const generateShortURL = armoryText => {
             req.destroy();
             reject();
         });
-        req.write(payload);
-        req.end();
+        req.end(payload);
         console.log("sent the req");
     });
 }
