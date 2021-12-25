@@ -56,16 +56,19 @@ const generateShortURL = async (armoryText) => {
             "Content-Type": "application/x-www-form-urlencoded",
             "Content-Length": payload.length,
         },
+        timeout: 1000,
     };
 
     const promise = new Promise((resolve, reject) => {
         const req = https.request(options, res => {
             res.on("end", () => {
-                if (res.statusCode != 200) reject();
                 resolve(`https://pcredivewiki.tw/Armory?s=${uuid}`);
             });
         });
-        req.on("error", err => reject(err));
+        req.on("error", err => {
+            console.error(err);
+            reject();
+        });
         req.write(payload);
         req.end();
     });
