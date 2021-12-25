@@ -69,6 +69,11 @@ const generateShortURL = async (armoryText) => {
             console.error(err);
             reject();
         });
+        req.on("timeout", () => {
+            console.error("timed out");
+            req.destroy();
+            reject();
+        });
         req.write(payload);
         req.end();
     });
