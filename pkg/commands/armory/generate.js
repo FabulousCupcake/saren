@@ -98,7 +98,8 @@ const generateArmoryTextFunc = async (interaction) => {
     const armoryText = transformToArmorySerializationText(responseBody, armoryTargetText);
 
     // Try to make short URL
-    const shortURL = await generateShortURL(armoryText);
+    // const shortURL = await generateShortURL(armoryText);
+    const shortURL = "https://google.com"
 
     // Build embed
     const messageEmbed = new MessageEmbed()
