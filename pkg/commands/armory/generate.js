@@ -60,7 +60,7 @@ const generateShortURL = armoryText => {
     };
 
     return new Promise((resolve, reject) => {
-        const req = https.request(options, () => {
+        const req = https.request(options, res => {
             if (res.statusCode != "200") reject();
             resolve(`https://pcredivewiki.tw/Armory?s=${uuid}`);
         });
