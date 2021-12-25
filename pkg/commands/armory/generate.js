@@ -29,7 +29,7 @@ const checkPermissions = interaction => {
 };
 
 // generateShortURL sends a request to pcredivewiki to save armorytext
-const generateShortURL = async (armoryText) => {
+const generateShortURL = armoryText => {
     // weirdly enough **we** decide the uuid, 8 characters length, hex characters
     const generateUUID = () => {
         let uuid = "";
