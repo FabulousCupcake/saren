@@ -57,13 +57,11 @@ const generateArmoryTextFunc = async (interaction) => {
 
     // Reply
     const messageEmbed = new MessageEmbed()
-        .setTitle("Armory Text")
         .setAuthor(targetUser.username, targetUser.avatarURL())
         .setDescription(armoryText)
         .setColor("F55291")
         .setFooter("Generated with data from")
-        .setTimestamp(new Date(lastSyncTimestamp))
-        .setURL("https://pcredivewiki.tw/armory")
+        .setTimestamp(lastSyncTimestamp * 1000)
 
     interaction.followUp({
         content: "Here you go!",
