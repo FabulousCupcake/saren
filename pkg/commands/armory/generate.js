@@ -60,7 +60,7 @@ const generateArmoryTextFunc = async (interaction) => {
         .setDescription(armoryText)
         .setColor("F55291")
         .setFooter("Generated with data from")
-        .setTimestamp(new Date(lastSyncTimestamp).toISOString())
+        .setTimestamp(new Date(lastSyncTimestamp))
 
     interaction.followUp({
         content: "Here you go!",
