@@ -1,3 +1,4 @@
+const { MessageAttachment } = require("discord.js");
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember } = require("../../acl/acl.js");
@@ -56,12 +57,14 @@ const generateArmoryTextFunc = async (interaction) => {
     const armoryText = transformToArmorySerializationText(responseBody, armoryTargetText);
 
     // Reply
+    const buffer = Buffer.from(armoryText);
+    const filename = `${currentTimestamp}.txt`;
+    const data = { content_type: "text/plain" };
+    const attachment = new MessageAttachment(buffer, filename, data);
+
     interaction.followUp({
         content: `Here you go! This data was from ${timeText}!`,
-        files: [{
-            attachment: Buffer.from(`      \n${armoryText}`),
-            name: `${currentTimestamp}.txt`,
-         }],
+        files: [ attachment ],
         ephemeral: true,
     });
 }
