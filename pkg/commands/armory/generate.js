@@ -59,7 +59,7 @@ const generateArmoryTextFunc = async (interaction) => {
     // Reply
     const messageEmbed = new MessageEmbed()
         .setAuthor({
-            name: targetuser.username,
+            name: targetUser.username,
             iconURL: targetUser.avatarURL(),
         })
         .setDescription(`\`\`\`${armoryText}\`\`\``)
