@@ -57,10 +57,7 @@ const generateArmoryTextFunc = async (interaction) => {
 
     // Reply
     const messageEmbed = new MessageEmbed()
-        .setAuthor({
-            name: targetUser.username,
-            iconURL: targetUser.avatarURL(),
-        })
+        .setAuthor(targetUser.username, targetUser.avatarURL())
         .setDescription(`\`\`\`${armoryText}\`\`\``)
         .setColor("F55291")
         .setFooter("Generated with data from")
