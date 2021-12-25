@@ -47,8 +47,7 @@ const generateArmoryTextFunc = async (interaction) => {
         return;
     }
 
-    // Get last sync timestamp and transform into relative time format
-    const currentTimestamp = new Date().getTime();
+    // Get last sync timestamp
     const lastSyncTimestamp = await getUserSyncTimestamp(targetUser.id);
 
     // Generate armory text
@@ -61,7 +60,7 @@ const generateArmoryTextFunc = async (interaction) => {
         .setDescription(armoryText)
         .setColor("F55291")
         .setFooter("Generated with data from")
-        .setTimestamp(lastSyncTimestamp * 1000)
+        .setTimestamp(new Date(lastSyncTimestamp).toISOString())
 
     interaction.followUp({
         content: "Here you go!",
