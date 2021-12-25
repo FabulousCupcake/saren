@@ -56,12 +56,10 @@ const generateArmoryTextFunc = async (interaction) => {
     const armoryText = transformToArmorySerializationText(responseBody, armoryTargetText);
 
     // Reply
-    const armoryTextAttachment = Buffer.from(armoryText);
-
     interaction.followUp({
         content: `Here you go! This data was from ${timeText}!`,
         files: [{
-            attachment: armoryTextAttachment,
+            attachment: armoryText,
             name: `${currentTimestamp}.txt`,
          }],
         ephemeral: true,
