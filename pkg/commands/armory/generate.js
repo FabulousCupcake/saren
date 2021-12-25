@@ -35,7 +35,7 @@ const generateArmoryTextFunc = async (interaction) => {
     });
 
     // Determine target
-    const targetUser = interaction.options.getUser("target") || interaction.member;
+    const targetUser = interaction.options.getUser("target") || interaction.member.user;
 
     // Fetch last sync response body
     const responseBody = await getUserData(targetUser.id);
@@ -50,7 +50,6 @@ const generateArmoryTextFunc = async (interaction) => {
     // Get last sync timestamp and transform into relative time format
     const currentTimestamp = new Date().getTime();
     const lastSyncTimestamp = await getUserSyncTimestamp(targetUser.id);
-    const timeText = relatime(lastSyncTimestamp - currentTimestamp);
 
     // Generate armory text
     const armoryTargetText = await getArmoryText(targetUser.id);
