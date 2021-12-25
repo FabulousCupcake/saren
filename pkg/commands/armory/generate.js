@@ -59,8 +59,9 @@ const generateArmoryTextFunc = async (interaction) => {
     interaction.followUp({
         content: `Here you go! This data was from ${timeText}!`,
         files: [{
-            attachment: armoryText,
+            attachment: Buffer.from(armoryText, "utf-8"),
             name: `${currentTimestamp}.txt`,
+            description: armoryText,
          }],
         ephemeral: true,
     });
