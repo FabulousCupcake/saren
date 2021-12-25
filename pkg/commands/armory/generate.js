@@ -59,7 +59,7 @@ const generateShortURL = async (armoryText) => {
         timeout: 1000,
     };
 
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         const req = https.request(options, res => {
             res.on("end", () => {
                 resolve(`https://pcredivewiki.tw/Armory?s=${uuid}`);
@@ -72,8 +72,6 @@ const generateShortURL = async (armoryText) => {
         req.write(payload);
         req.end();
     });
-
-    return promise;
 }
 
 const generateArmoryTextFunc = async (interaction) => {
