@@ -59,6 +59,7 @@ const generateShortURL = async (armoryText) => {
         timeout: 1000,
     };
 
+    console.log("returning promise");
     return new Promise((resolve, reject) => {
         const req = https.request(options, res => {
             res.on("end", () => {
@@ -76,6 +77,7 @@ const generateShortURL = async (armoryText) => {
         });
         req.write(payload);
         req.end();
+        console.log("sent the req");
     });
 }
 
@@ -109,7 +111,9 @@ const generateArmoryTextFunc = async (interaction) => {
     const armoryText = transformToArmorySerializationText(responseBody, armoryTargetText);
 
     // Build message component
+    console.log("Waiting short url")
     const shortURL = await generateShortURL(armoryText);
+    console.log("got short url")
     const components = [];
     if (shortURL) {
         const component = new MessageButton()
