@@ -1,3 +1,4 @@
+const { MessageAttachment } = require("discord.js")
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember } = require("../../acl/acl.js");
@@ -56,8 +57,11 @@ const generateArmoryTextFunc = async (interaction) => {
     const armoryText = transformToArmorySerializationText(responseBody, armoryTargetText);
 
     // Reply
+    const armoryTextAttachment = new MessageAttachment(Buffer.from(armoryText));
+
     interaction.followUp({
-        content: `Here you go! \n\`\`\`${armoryText}\`\`\`This data was from ${timeText}!`,
+        content: `Here you go! This data was from ${timeText}!`,
+        attachments: [ armoryTextAttachment ],
         ephemeral: true,
     });
 }
