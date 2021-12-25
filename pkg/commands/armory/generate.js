@@ -1,3 +1,4 @@
+const { MessageEmbed } = require("discord.js");
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember } = require("../../acl/acl.js");
@@ -56,12 +57,18 @@ const generateArmoryTextFunc = async (interaction) => {
     const armoryText = transformToArmorySerializationText(responseBody, armoryTargetText);
 
     // Reply
+    const messageEmbed = new MessageEmbed()
+        .setAuthor({
+            name: targetuser.username,
+            iconURL: targetUser.avatarURL(),
+        })
+        .setDescription(`\`\`\`${armoryText}\`\`\``)
+        .setColor("F55291")
+        .setFooter("Generated with data from")
+        .setTimestamp(lastSyncTimestamp)
+
     interaction.followUp({
-        content: `Here you go! This data was from ${timeText}!`,
-        files: [{
-            attachment: Buffer.from(`Test!:\n${armoryText}`),
-            name: `${currentTimestamp}.txt`,
-         }],
+        embeds: [ messageEmbed ],
         ephemeral: true,
     });
 }
