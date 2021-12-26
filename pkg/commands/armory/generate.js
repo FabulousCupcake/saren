@@ -66,12 +66,12 @@ const generateShortURL = armoryText => {
         });
         req.on("error", err => {
             console.error(err);
-            reject();
+            resolve()
         });
         req.on("timeout", () => {
             console.error("timed out");
             req.destroy();
-            reject();
+            resolve();
         });
         req.end(payload);
     });
