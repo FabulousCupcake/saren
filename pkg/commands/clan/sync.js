@@ -26,12 +26,12 @@ const checkPermissions = interaction => {
         };
     }
 
-    if (isCalledByClanAdmin(interaction)) {
-        return {
-            allowed: true,
-            reason: "Caller is a clan administrator",
-        };
-    }
+    // if (isCalledByClanAdmin(interaction)) {
+    //     return {
+    //         allowed: true,
+    //         reason: "Caller is a clan administrator",
+    //     };
+    // }
 
     return {
         allowed: false,
