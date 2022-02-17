@@ -109,8 +109,7 @@ const syncSubCommand = new SlashCommandSubcommandBuilder()
     .addUserOption(option =>
         option
         .setName("target")
-        .setDescription("The discord user whose account should be synchronized")
-        .setRequired(true))
+        .setDescription("The discord user whose account should be synchronized"))
 
 module.exports = {
     syncFunc,
