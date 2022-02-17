@@ -52,7 +52,8 @@ const syncFunc = async (interaction) => {
     // Either via Message Component button
     //     or via required boolean (ehh)
 
-    const targetUser = interaction.options.getUser("target");
+    // Determine target
+    const targetUser = interaction.options.getUser("target")  || interaction.member.user;
 
     let responseBody;
     try {
