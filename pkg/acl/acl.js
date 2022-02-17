@@ -44,6 +44,10 @@ const isCalledByClanAdmin = interaction => {
 
 const targetIsCaller = interaction => {
     const targetUser = interaction.options.getUser("target");
+
+    // If target is unspecified, allow it — it probably assumes target is caller.
+    if (!targetUser) return true;
+
     const callerUser = interaction.user;
     return targetUser.id === callerUser.id;
 }
