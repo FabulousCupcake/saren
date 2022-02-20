@@ -2,7 +2,7 @@ const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
 const { getUserSyncTimestamp } = require("../redis/redis.js");
-const { hasStateFile } = require("../s3/s3.js");
+const { getUserDetailsFromStateFile } = require("../s3/s3.js");
 const { relatime } = require("../utils/format.js");
 
 const checkPermissions = interaction => {
@@ -47,14 +47,14 @@ const statusFunc = async (interaction) => {
         ephemeral: true,
     });
 
-    // Check if we have the user's state file
+    // Try fetching username from statefile
     const targetUser = interaction.options.getUser("target");
-    const stateFileExists = await hasStateFile(targetUser.id);
+    const userDetails = await getUserDetailsFromStateFile(targetUser.id);
 
-    // We don't
-    if (!stateFileExists) {
+    // It doesn't exist
+    if (!userDetails) {
         interaction.followUp({
-            content: `Oh no! I don't have the account data for ${targetUser.tag}!`,
+            content: `Oh no! I don't have an account data for <@!${targetUser.id}>!`,
             ephemeral: true,
         });
         return;
@@ -63,18 +63,13 @@ const statusFunc = async (interaction) => {
     // Compute last update time
     const currentTimestamp = new Date().getTime();
     const lastSyncTimestamp = await getUserSyncTimestamp(targetUser.id);
-    let timestamp = "";
-    if (hasStateFile) {
-        if (lastSyncTimestamp) {
-            timestamp = `(from ${relatime(lastSyncTimestamp - currentTimestamp)})`;
-        } else {
-            timestamp = "(I'm not sure when!)";
-        }
-    }
+    const timestamp = (lastSyncTimestamp) ?
+        relatime(lastSyncTimestamp - currentTimestamp) :
+        "...I'm not sure when! Probably never!";
 
     // Send message
     interaction.followUp({
-        content: `I have the account data for ${targetUser.tag} written down right here ${timestamp}!`,
+        content: `I have the account data for <@!${targetUser.id}> / ${userDetails.username} (${userDetails.viewer_id}) written down right here! Last sync was done ${timestamp}!`,
         ephemeral: true,
     });
 }
