@@ -1,9 +1,18 @@
+const fetchBondLevel = (readStoryIds, charId) => {
+  return readStoryIds
+  .filter(id => id.toString().substr(0, 4) == charId)
+  .map(id => parseInt(id.substr(4, 3), 10))
+  .reduce((a, b) => Math.max(a, b), 0);
+}
+
 const parseResponseBody = (resBody) => {
     const fetchShardAmount = (charId) => resBody.item_list.find((i) => i.id == `3${charId}`)?.stock || 0;
     const fetchBondLevel = (charId) => resBody.user_chara_info.find((i) => i.chara_id == charId)?.love_level || 0;
     const normalizeEquipRefineLevel = (eq) => !eq.is_slot ? -1 : eq.enhancement_level;
 
     const units = resBody.unit_list;
+    const readStoryIds = resBody.read_story_ids;
+
     const result = units.map((u) => {
       const id = parseInt(u.id.toString().substr(0, 4), 10);
       const level = u.unit_level;
@@ -21,7 +30,7 @@ const parseResponseBody = (resBody) => {
       const sk2 = u.main_skill?.[1]?.skill_level || 0;
       const ex = u.ex_skill?.[0]?.skill_level || 0;
       const ue = u.unique_equip_slot[0]?.enhancement_level || 0;
-      const bond = fetchBondLevel(id);
+      const bond = fetchBondLevel(readStoryIds, id);
 
       // prettier-ignore
       const columns = [
