@@ -8,7 +8,6 @@ const fetchBondLevel = (readStoryIds, charId) => {
 
 const parseResponseBody = (resBody) => {
     const fetchShardAmount = (charId) => resBody.item_list.find((i) => i.id == `3${charId}`)?.stock || 0;
-    const fetchBondLevel = (charId) => resBody.user_chara_info.find((i) => i.chara_id == charId)?.love_level || 0;
     const normalizeEquipRefineLevel = (eq) => !eq.is_slot ? -1 : eq.enhancement_level;
 
     const units = resBody.unit_list;
