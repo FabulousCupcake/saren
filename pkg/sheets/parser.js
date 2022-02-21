@@ -1,6 +1,7 @@
-const fetchBondLevel5 = (readStoryIds, charId) => {
+const fetchBondLevel6 = (readStoryIds, charId) => {
   return readStoryIds
-  .filter(id => parseInt(id.toString().substr(1, 3), 10) === charId)
+  .map(id => id.toString())
+  .filter(id => id.substr(0, 4) == charId)
   .map(id => parseInt(id.substr(4, 3), 10))
   .reduce((a, b) => Math.max(a, b), 0);
 }
