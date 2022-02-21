@@ -1,4 +1,4 @@
-const fetchBondLevel6 = (readStoryIds, charId) => {
+const fetchBondLevel = (readStoryIds, charId) => {
   return readStoryIds
   .map(id => id.toString())
   .filter(id => id.substr(0, 4) == charId)
