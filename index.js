@@ -32,6 +32,9 @@ const handler = async (interaction) => {
   // Tell discord that we ACKed
   interaction.deferReply({ ephemeral: true });
 
+  // Log it
+  console.info(`${interaction.user.id} (${interaction.user.tag}) executed ${command}`, interaction.options.data);
+
   try {
     commandFunc(interaction);
   } catch (err) {
