@@ -35,6 +35,7 @@ const handler = async (interaction) => {
   // Log it
   (function() {
     const optionsToText = options => {
+      if (!options) return "";
       const content = options.map(o => {
         // Recurse if subcommand
         if (o.type = "SUB_COMMAND") {
@@ -51,7 +52,7 @@ const handler = async (interaction) => {
     const discordUserTag = interaction.user.tag;
     const optionsText = optionsToText(interaction.options.data);
 
-    console.info(`${discordUserId} (${discordUserTag}): ${command} [${optionsText}]`);
+    console.info(`${discordUserId} (${discordUserTag}): ${command}: ${optionsText}`);
   })();
 
 
