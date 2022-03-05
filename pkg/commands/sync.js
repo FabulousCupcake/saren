@@ -3,6 +3,7 @@ const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
 const { updateSpreadsheet } = require("../sheets/sheets.js");
 const { setUserSyncTimestamp, setUserData } = require("../redis/redis.js");
+const { isHittingGlobalSyncRateLimit, isHittingUserSyncRateLimit } = require("../redis/ratelimit.js");
 const { login } = require("../lambda/lambda.js");
 
 const checkPermissions = interaction => {
@@ -55,6 +56,23 @@ const syncFunc = async (interaction) => {
     // Determine target
     const targetUser = interaction.options.getUser("target")  || interaction.member.user;
 
+    // Check ratelimits
+    if (isHittingGlobalSyncRateLimit()) {
+        interaction.followUp({
+            content: `I'm too busy right now! Please come back later!`,
+            ephemeral: true,
+        });
+        return;
+    }
+    if (isHittingUserSyncRateLimit(targetUser.id)) {
+        interaction.followUp({
+            content: `I've updated ${targetUser.tag}'s data recently! Please try again later!`,
+            ephemeral: true,
+        });
+        return;
+    }
+
+    // Delegate to Suzume
     let responseBody;
     try {
         const response = await login(targetUser.id);
