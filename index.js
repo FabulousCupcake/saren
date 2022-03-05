@@ -35,12 +35,12 @@ const handler = async (interaction) => {
   // Log it
   (function() {
     const Y = f => (x => x(x))(y => f(x => y(y)(x)));
-    const optionsToText = Y(optionsToText => options => {
+    const optionsToText = Y(optionsToTextFn => options => {
       if (!options) return "";
       const content = options.map(o => {
         // Recurse if subcommand
-        if (o.type == "SUB_COMMAND") {
-          const value = optionsToText(o.options);
+        if (o.type == "SUB_COMMAND" || o.type == "SUB_COMMAND_GROUP") {
+          const value = optionsToTextFn(o.options);
           return `${o.name}: ${value}`;
         }
 
