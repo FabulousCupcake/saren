@@ -38,7 +38,7 @@ const handler = async (interaction) => {
       const content = options.map(o => {
         // Recurse if subcommand
         if (o.type = "SUB_COMMAND") {
-          return optionsToText(o);
+          return optionsToText(o.options);
         }
 
         return `${o.name}: ${o.value}`
