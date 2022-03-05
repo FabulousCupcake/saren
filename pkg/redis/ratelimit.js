@@ -15,7 +15,7 @@ const initializeGlobalSyncRateLimit = (redisClient) => {
         limit: 100,
         key: () => "global-sync",
     });
-    globalSyncRateLimiter = util.promisify(limit);
+    globalSyncRateLimiter = promisify(limit);
 };
 
 const initializeUserSyncRateLimit = (redisClient) => {
@@ -25,7 +25,7 @@ const initializeUserSyncRateLimit = (redisClient) => {
         limit: 2,
         key: (discordId) => `user-sync-${discordId}`,
     });
-    userSyncRateLimiter = util.promisify(limit);
+    userSyncRateLimiter = promisify(limit);
 };
 
 const printRateDebug = (rate) => {
