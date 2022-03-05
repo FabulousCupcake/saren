@@ -26,7 +26,7 @@ const initializeUserSyncRateLimit = (redisClient) => {
 
 const printRateDebug = (rate) => {
     if (!DEBUG) return;
-    console.debug(`Rate Usage: ${rate.current}/${rate.limit}`);
+    console.debug(`[${rate.current}/${rate.limit}]: ${rate.key}`);
 }
 
 // isHittingGlobalSyncRateLimit returns true if hitting global rate limit for syncs
@@ -70,7 +70,7 @@ const isHittingUserSyncRateLimit = (discordId) => {
 };
 
 const initializeRateLimiters = () => {
-    redisClient = getRedisClient()
+    redisClient = getRedisClient();
     initializeGlobalSyncRateLimit(redisClient);
     initializeUserSyncRateLimit(redisClient);
 }
