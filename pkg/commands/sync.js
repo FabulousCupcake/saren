@@ -57,14 +57,14 @@ const syncFunc = async (interaction) => {
     const targetUser = interaction.options.getUser("target")  || interaction.member.user;
 
     // Check ratelimits
-    if (isHittingGlobalSyncRateLimit()) {
+    if (await isHittingGlobalSyncRateLimit()) {
         interaction.followUp({
             content: `I'm too busy right now! Please come back later!`,
             ephemeral: true,
         });
         return;
     }
-    if (isHittingUserSyncRateLimit(targetUser.id)) {
+    if (await isHittingUserSyncRateLimit(targetUser.id)) {
         interaction.followUp({
             content: `I've updated ${targetUser.tag}'s data recently! Please try again later!`,
             ephemeral: true,

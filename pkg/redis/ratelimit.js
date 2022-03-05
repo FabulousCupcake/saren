@@ -1,4 +1,6 @@
 const { create: createRedisRateLimiter } = require('redis-rate-limiter');
+const { promisify } = require("util");
+
 const { getRedisClient } = require("./redis");
 
 const DEBUG = true;
@@ -7,21 +9,23 @@ let globalSyncRateLimiter;
 let userSyncRateLimiter;
 
 const initializeGlobalSyncRateLimit = (redisClient) => {
-    globalSyncRateLimiter = createRedisRateLimiter({
+    const limit = createRedisRateLimiter({
         redis: redisClient,
         window: 3600,
         limit: 100,
         key: () => "global-sync",
     });
+    globalSyncRateLimiter = util.promisify(limit);
 };
 
 const initializeUserSyncRateLimit = (redisClient) => {
-    userSyncRateLimiter = createRedisRateLimiter({
+    const limit = createRedisRateLimiter({
         redis: redisClient,
         window: 7200,
         limit: 2,
         key: (discordId) => `user-sync-${discordId}`,
     });
+    userSyncRateLimiter = util.promisify(limit);
 };
 
 const printRateDebug = (rate) => {
@@ -30,43 +34,29 @@ const printRateDebug = (rate) => {
 }
 
 // isHittingGlobalSyncRateLimit returns true if hitting global rate limit for syncs
-const isHittingGlobalSyncRateLimit = () => {
-    let retval = false;
-    globalSyncRateLimiter("", (err, rate) => {
-        if (err) {
-            console.error("Rate limiting not available!");
-            retval = true;
-            return;
-        }
+const isHittingGlobalSyncRateLimit = async () => {
+    const rate = await globalSyncRateLimiter("");
+    printRateDebug(rate);
 
-        printRateDebug(rate);
-        if (rate.over) {
-            console.warn("Hitting global sync rate limit");
-            retval = true;
-            return;
-        }
-    });
-    return retval;
+    if (rate.over) {
+        console.warn("Hitting global sync rate limit");
+        return true;
+    }
+
+    return false;
 };
 
 // isHittingUserSyncRateLimit returns true if hitting rate limit for user syncs
-const isHittingUserSyncRateLimit = (discordId) => {
-    let retval = false;
-    userSyncRateLimiter(discordId, (err, rate) => {
-        if (err) {
-            console.error("Rate limiting not available!");
-            retval = true;
-            return;
-        }
+const isHittingUserSyncRateLimit = async (discordId) => {
+    const rate = await userSyncRateLimiter(discordId);
+    printRateDebug(rate);
 
-        printRateDebug(rate);
-        if (rate.over) {
-            console.warn("Hitting user sync rate limit", discordId);
-            retval = true;
-            return;
-        }
-    });
-    return retval;
+    if (rate.over) {
+        console.warn("Hitting user sync rate limit", discordId);
+        return true;
+    }
+
+    return false;
 };
 
 const initializeRateLimiters = () => {
