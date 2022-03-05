@@ -34,17 +34,22 @@ const handler = async (interaction) => {
 
   // Log it
   (function() {
+    const optionsToText = options => {
+      const content = options.map(o => {
+        // Recurse if subcommand
+        if (o.type = "SUB_COMMAND") {
+          return optionsToText(o);
+        }
+
+        return `${o.name}: ${o.value}`
+      }).join(", ");
+
+      return `[${content}]`;
+    };
+
     const discordUserId = interaction.user.id;
     const discordUserTag = interaction.user.tag;
-    const optionsText = interaction.options.data.map(o => {
-      if (o.type = "SUB_COMMAND") {
-        const opts = o.options.map(oo => {
-          return `${oo.name}: ${oo.value}`;
-        }).join(", ");
-        return `[${opts}]`;
-      }
-      return `${o.name}: ${o.value}`;
-    }).join(", ");
+    const optionsText = optionsToText(interaction.options.data);
 
     console.info(`${discordUserId} (${discordUserTag}): ${command} [${optionsText}]`);
   })();
