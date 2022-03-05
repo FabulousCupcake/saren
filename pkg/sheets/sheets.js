@@ -16,14 +16,14 @@ const initializeSpreadsheetClient = async () => {
     });
 
     // Initialize clients
-    docs.forEach(doc => {
+    for (const doc of docs) {
         await doc.useServiceAccountAuth({
             client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
             private_key: process.env.GOOGLE_PRIVATE_KEY,
         });
         await doc.loadInfo();
         console.log("Successfully initialized Google Spreadsheet Client", doc.title);
-    });
+    }
 };
 
 // Updates row 1 containing name
