@@ -6,6 +6,7 @@ const determineClanConfig = member => {
     const configs = clanConfigs.filter(clan => {
         return member.roles.cache.has(clan.memberRoleId);
     });
+    console.debug(`acl: ${member.user.tag} is part of: ${configs.map(c => c.name)}`);
 
     // In 0 clan, refuse
     if (configs.length === 0) return false;
@@ -42,6 +43,7 @@ const isCalledByClanAdmin = interaction => {
 //   Especially in places where we update sheet and need to obtain sheet id from config
 const isInSameClan = async (interaction) => {
     const targetUser = interaction.options.getUser("target");
+    console.log("targetuser", targetUser.id);
 
     // If target is unspecified return true
     if (!targetUser) return true;
@@ -50,8 +52,12 @@ const isInSameClan = async (interaction) => {
     if (!interaction.guild) await interaction.client.guilds.fetch(interaction.guildId);
     const targetMember = await interaction.guild.members.fetch({ force: true, user: targetUser });
 
+    console.log("targetmember", targetMember.id);
+
     const callerConfig = determineClanConfig(interaction.member);
     const targetConfig = determineClanConfig(targetMember);
+
+    console.log(callerConfig, targetConfig);
 
     return (callerConfig.name === targetConfig.name);
 }
