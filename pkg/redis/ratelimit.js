@@ -3,7 +3,7 @@ const { promisify } = require("util");
 
 const { getRedisClient } = require("./redis");
 
-const DEBUG = true;
+const DEBUG = false;
 
 let globalSyncRateLimiter;
 let userSyncRateLimiter;
