@@ -62,6 +62,12 @@ const clanSyncFunc = async (interaction) => {
     const allMembers = await interaction.guild.members.fetch({ force: true });
     const clanMembers = allMembers.filter(m => m.roles.cache.has(clanConfig.memberRoleId));
 
+    // Stop if there's >30 members
+    if (clanMembers.length > 30) return interaction.followUp({
+        content: "There are too many people in the clan! Please make some space, I can't work! You can use `/saren clan status` to check the member list!",
+        ephemeral: true,
+    });
+
     // This is the func that generates current sync state in text
     // We print this on start of each loop
     const status = {};
