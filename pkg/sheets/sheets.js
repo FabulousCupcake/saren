@@ -36,7 +36,7 @@ const updateSheetMetadata = async (sheet) => {
     sheet.getCellByA1("M1").value = new Date().toUTCString();
 }
 
-const newFromTemplate = async (newSheetName) => {
+const newFromTemplate = async (doc, newSheetName) => {
     await doc.sheetsByTitle["Template"].copyToSpreadsheet(doc.spreadsheetId);
     await doc.loadInfo();
     await doc.sheetsByTitle["Copy of Template"].updateProperties({
@@ -61,7 +61,7 @@ const updateSpreadsheet = async (clanName, responseBody) => {
     // Do we need to create new sheet from template?
     await doc.loadInfo();
     if (!doc.sheetsByTitle[username]) {
-        await newFromTemplate(doc,username);
+        await newFromTemplate(doc, username);
     }
 
     // Load relevant ranges
