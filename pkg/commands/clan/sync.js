@@ -2,7 +2,7 @@ const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, AUTHORIZED_ROLES_LIST } = require("../../acl/acl.js");
 const { setUserSyncTimestamp, setUserData } = require("../../redis/redis.js");
-const { isHittingGlobalSyncRateLimit, isHittingUserSyncRateLimit } = require("../redis/ratelimit.js");
+const { isHittingGlobalSyncRateLimit, isHittingUserSyncRateLimit } = require("../../redis/ratelimit.js");
 const { updateSpreadsheet } = require("../../sheets/sheets.js");
 const { login } = require("../../lambda/lambda.js");
 
