@@ -16,12 +16,15 @@ const initializeSpreadsheetClient = async () => {
     });
 
     // Initialize clients
-    for (const doc of docs) {
+    for (const key in docs) {
+        const doc = docs[key];
+
         await doc.useServiceAccountAuth({
             client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
             private_key: process.env.GOOGLE_PRIVATE_KEY,
         });
         await doc.loadInfo();
+
         console.log("Successfully initialized Google Spreadsheet Client", doc.title);
     }
 };
