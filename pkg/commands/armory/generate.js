@@ -22,12 +22,12 @@ const checkPermissions = async (interaction) => {
         };
     }
 
-    if (! await isInSameClan(interaction)) {
-        return {
-            allowed: false,
-            reason: "You can only target members of your clan!"
-        }
-    }
+    // if (! await isInSameClan(interaction)) {
+    //     return {
+    //         allowed: false,
+    //         reason: "You can only target members of your clan!"
+    //     }
+    // }
 
     return {
         allowed: true,
