@@ -36,7 +36,15 @@ const handler = async (interaction) => {
   (function() {
     const discordUserId = interaction.user.id;
     const discordUserTag = interaction.user.tag;
-    const optionsText = interaction.options.data.options.map(o => `${o.name}: ${o.value}`).join(",");
+    const optionsText = interaction.options.map(o => {
+      if (o.type = "SUB_COMMAND") {
+        const opts = o.options.map(oo => {
+          return `${oo.name}: ${oo.value}`;
+        }).join(", ");
+        return `[${opts}]`;
+      }
+      return `${o.name}: ${o.value}`;
+    }).join(", ");
 
     console.info(`${discordUserId} (${discordUserTag}): ${command} [${optionsText}]`);
   })();
