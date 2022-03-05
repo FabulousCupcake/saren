@@ -43,7 +43,6 @@ const isCalledByClanAdmin = interaction => {
 //   Especially in places where we update sheet and need to obtain sheet id from config
 const isInSameClan = async (interaction) => {
     const targetUser = interaction.options.getUser("target");
-    console.log("targetuser", targetUser.id);
 
     // If target is unspecified return true
     if (!targetUser) return true;
@@ -52,12 +51,10 @@ const isInSameClan = async (interaction) => {
     if (!interaction.guild) await interaction.client.guilds.fetch(interaction.guildId);
     const targetMember = await interaction.guild.members.fetch({ force: true, user: targetUser });
 
-    console.log("targetmember", targetMember.id);
 
     const callerConfig = determineClanConfig(interaction.member);
     const targetConfig = determineClanConfig(targetMember);
 
-    console.log(callerConfig, targetConfig);
 
     return (callerConfig.name === targetConfig.name);
 }
