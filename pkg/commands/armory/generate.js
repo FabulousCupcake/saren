@@ -18,7 +18,7 @@ const checkPermissions = async (interaction) => {
     if (!isCalledByClanMember(interaction)) {
         return {
             allowed: false,
-            reason: "You are not a member of the clan!",
+            reason: "Unable to determine which clan you belong to!",
         };
     }
 
