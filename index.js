@@ -34,19 +34,22 @@ const handler = async (interaction) => {
 
   // Log it
   (function() {
-    const optionsToText = options => {
+    const Y = f => (x => x(x))(y => f(x => y(y)(x)));
+    const optionsToText = Y(optionsToText => options => {
       if (!options) return "";
       const content = options.map(o => {
         // Recurse if subcommand
-        if (o.type == "SUB_COMMAND_GROUP") {
-          return optionsToText(o.options);
+        if (o.type == "SUB_COMMAND") {
+          const value = optionsToText(o.options);
+          return `${o.name}: ${value}`;
         }
 
+        // Otherwise just return value
         return `${o.name}: ${o.value}`
       }).join(", ");
 
       return `[${content}]`;
-    };
+    });
 
     const discordUserId = interaction.user.id;
     const discordUserTag = interaction.user.tag;
