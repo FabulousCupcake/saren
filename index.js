@@ -33,7 +33,14 @@ const handler = async (interaction) => {
   interaction.deferReply({ ephemeral: true });
 
   // Log it
-  console.info(`${interaction.user.id} (${interaction.user.tag}) executed ${command}`, interaction.options.data);
+  (function() {
+    const discordUserId = interaction.user.id;
+    const discordUserTag = interaction.user.tag;
+    const optionsText = interaction.options.data.options.map(o => `${o.name}: ${o.value}`).join(",");
+
+    console.info(`${discordUserId} (${discordUserTag}): ${command} [${optionsText}]`);
+  })
+
 
   try {
     commandFunc(interaction);
