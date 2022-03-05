@@ -1,45 +1,59 @@
-const AUTHORIZED_USERS_LIST = {
-    "owner": [
-        "109729829670154240",   // FabulousCupcake#7972
-    ],
-    "admin": [
-        "196976643875667968",   // baeck#7724
-        "149763965197484032",   // Ding Doung#0727
-        "172825411032449025",   // Vanella#5983
-        "146011061924003840",   // Kots#5257
-        "344223469787152395",   // Fupyy#3379
-        "151096152568233984",   // Chaoticlight#3995
-        "291962081669021697",   // F2PLoli#2021
-        "104776095080964096",   // Mesh#1267
-        "215904532960509952",   // MikeP#9333
-    ],
-};
+const { clanConfigs, ownerDiscordId } = require("../config/config");
 
-const AUTHORIZED_ROLES_LIST = {
-    "admin": "866363432323514368",    // Vanilla Administration
-    "member": "859805729338818561",   // Vanilla
-};
+// Returns the clan config of the respective clan
+// returns false instead if part of >1 clan
+const determineClanConfig = member => {
+    const configs = clanConfigs.filter(clan => {
+        return member.roles.cache.has(clan.memberRoleId);
+    });
+
+    // In 0 clan, refuse
+    if (configs.length === 0) return false;
+
+    // In >1 clan, refuse
+    if (configs.length > 1) return false;
+
+    return configs[0];
+}
 
 const isCalledByOwner = interaction => {
-    if (AUTHORIZED_USERS_LIST.owner.includes(interaction.user.id)) return true;
+    if (interaction.user.id == ownerDiscordId) return true;
 
     return false;
 }
 
 const isCalledByClanMember = interaction => {
-    if (interaction.member.roles.cache.has(AUTHORIZED_ROLES_LIST.member)) return true;
+    const config = determineClanConfig(interaction.member);
+    if (!config) return false;
 
-    return false
+    return interaction.member.roles.cache.has(config.memberRoleId);
 }
 
 const isCalledByClanAdmin = interaction => {
-    // Check ID
-    if (!AUTHORIZED_USERS_LIST.admin.includes(interaction.user.id)) return true;
+    const config = determineClanConfig(interaction.member);
+    if (!config) return false;
 
-    // Check Role
-    if (interaction.member.roles.cache.has(AUTHORIZED_ROLES_LIST.admin)) return true;
+    return interaction.member.roles.cache.has(config.adminRoleId);
+}
 
-    return false;
+// isInSameClan ensures caller and target are from the same clan
+// We do this in `checkPermission` of every commnand that needs it
+//   This guarantees that target uses the same config, so we don't need to check and fetch manually again
+//   Especially in places where we update sheet and need to obtain sheet id from config
+const isInSameClan = async (interaction) => {
+    const targetUser = interaction.options.getUser("target");
+
+    // If target is unspecified return true
+    if (!targetUser) return true;
+
+    // User option does not provide role data, so we need to look it from guild members
+    if (!interaction.guild) await interaction.client.guilds.fetch(interaction.guildId);
+    const targetMember = await interaction.guild.members.fetch({ force: true, user: targetUser });
+
+    const callerConfig = determineClanConfig(interaction.member);
+    const targetConfig = determineClanConfig(targetMember);
+
+    return (callerConfig.name === targetConfig.name);
 }
 
 const targetIsCaller = interaction => {
@@ -53,10 +67,10 @@ const targetIsCaller = interaction => {
 }
 
 module.exports = {
-    AUTHORIZED_USERS_LIST,
-    AUTHORIZED_ROLES_LIST,
+    determineClanConfig,
     isCalledByOwner,
     isCalledByClanMember,
     isCalledByClanAdmin,
+    isInSameClan,
     targetIsCaller,
 }

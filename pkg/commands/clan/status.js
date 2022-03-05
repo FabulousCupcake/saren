@@ -1,6 +1,6 @@
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
-const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, AUTHORIZED_ROLES_LIST } = require("../../acl/acl.js");
+const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, determineClanConfig } = require("../../acl/acl.js");
 const { getUserSyncTimestamp } = require("../../redis/redis.js");
 const { listStateFiles } = require("../../s3/s3.js");
 const { relatime } = require("../../utils/format.js");
@@ -41,10 +41,17 @@ const clanStatusFunc = async (interaction) => {
     });
 
     // TODO
-    // 1. Obtain ID of all discord users with Vanilla Member role
+    // 0. Identify Caller's Clan
+    const clanConfig = determineClanConfig(interaction.member);
+    if (!clanConfig) return interaction.followUp({
+        content: "I don't know to which clan you belong to! I'm not doing this!",
+        ephemeral: true,
+    });
+
+    // 1. Obtain ID of all discord users with Member role
     if (!interaction.guild) await interaction.client.guilds.fetch(interaction.guildId);
     const allMembers = await interaction.guild.members.fetch({ force: true });
-    const clanMembers = allMembers.filter(m => m.roles.cache.has(AUTHORIZED_ROLES_LIST.member));
+    const clanMembers = allMembers.filter(m => m.roles.cache.has(clanConfig.memberRoleId));
 
     // 2. Obtain all ID in S3 (listStateFiles)
     const suzumeList = await listStateFiles();

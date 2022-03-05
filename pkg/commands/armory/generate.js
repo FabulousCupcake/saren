@@ -2,12 +2,12 @@ const https = require('https');
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
-const { isCalledByOwner, isCalledByClanMember } = require("../../acl/acl.js");
+const { isCalledByOwner, isCalledByClanMember, isInSameClan } = require("../../acl/acl.js");
 const { getArmoryText, getUserData, getUserSyncTimestamp } = require("../../redis/redis.js");
 const { relatime } = require("../../utils/format.js");
 const { transformToArmorySerializationText } = require("./armory.js");
 
-const checkPermissions = interaction => {
+const checkPermissions = async (interaction) => {
     if (isCalledByOwner(interaction)) {
         return {
             allowed: true,
@@ -20,6 +20,13 @@ const checkPermissions = interaction => {
             allowed: false,
             reason: "You are not a member of the clan!",
         };
+    }
+
+    if (! await isInSameClan(interaction)) {
+        return {
+            allowed: false,
+            reason: "You can only target members of your clan!"
+        }
     }
 
     return {
@@ -78,7 +85,7 @@ const generateShortURL = armoryText => {
 }
 
 const generateArmoryTextFunc = async (interaction) => {
-    const { allowed, reason } = checkPermissions(interaction);
+    const { allowed, reason } = await checkPermissions(interaction);
     if (!allowed) return interaction.followUp({
         content: reason,
         ephemeral: true,

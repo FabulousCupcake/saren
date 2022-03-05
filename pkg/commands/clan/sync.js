@@ -1,6 +1,6 @@
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
-const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, AUTHORIZED_ROLES_LIST } = require("../../acl/acl.js");
+const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, determineClanConfig } = require("../../acl/acl.js");
 const { setUserSyncTimestamp, setUserData } = require("../../redis/redis.js");
 const { isHittingGlobalSyncRateLimit, isHittingUserSyncRateLimit } = require("../../redis/ratelimit.js");
 const { updateSpreadsheet } = require("../../sheets/sheets.js");
@@ -50,10 +50,17 @@ const clanSyncFunc = async (interaction) => {
     });
 
     // TODO
-    // 1. Obtain ID of all discord users with Vanilla Member role
+    // 0. Identify Caller's Clan
+    const clanConfig = determineClanConfig(interaction.member);
+    if (!clanConfig) return interaction.followUp({
+        content: "I don't know to which clan you belong to! I'm not doing this!",
+        ephemeral: true,
+    });
+
+    // 1. Obtain ID of all discord users with Member role
     if (!interaction.guild) await interaction.client.guilds.fetch(interaction.guildId);
     const allMembers = await interaction.guild.members.fetch({ force: true });
-    const clanMembers = allMembers.filter(m => m.roles.cache.has(AUTHORIZED_ROLES_LIST.member));
+    const clanMembers = allMembers.filter(m => m.roles.cache.has(clanConfig.memberRoleId));
 
     // This is the func that generates current sync state in text
     // We print this on start of each loop
@@ -119,7 +126,7 @@ const clanSyncFunc = async (interaction) => {
 
         // 3.3 Push to Sheets
         try {
-            await updateSpreadsheet(responseBody);
+            await updateSpreadsheet(clanConfig.name, responseBody);
         } catch (err) {
             console.error("Failed updating spreadsheet", err);
             status[memberId] = STATUS_FAILED;

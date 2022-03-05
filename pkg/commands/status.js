@@ -1,11 +1,11 @@
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
-const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
+const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, isInSameClan, targetIsCaller } = require("../acl/acl.js");
 const { getUserSyncTimestamp } = require("../redis/redis.js");
 const { getUserDetailsFromStateFile } = require("../s3/s3.js");
 const { relatime } = require("../utils/format.js");
 
-const checkPermissions = interaction => {
+const checkPermissions = async (interaction) => {
     if (isCalledByOwner(interaction)) {
         return {
             allowed: true,
@@ -28,10 +28,12 @@ const checkPermissions = interaction => {
     }
 
     if (isCalledByClanAdmin(interaction)) {
-        return {
-            allowed: true,
-            reason: "Caller is a clan administrator",
-        };
+        if (await isInSameClan(interaction)) {
+            return {
+                allowed: true,
+                reason: "Caller is a clan administrator",
+            };
+        }
     }
 
     return {
@@ -41,7 +43,7 @@ const checkPermissions = interaction => {
 };
 
 const statusFunc = async (interaction) => {
-    const { allowed, reason } = checkPermissions(interaction);
+    const { allowed, reason } = await checkPermissions(interaction);
     if (!allowed) return interaction.followUp({
         content: reason,
         ephemeral: true,

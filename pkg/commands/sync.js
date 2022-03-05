@@ -1,12 +1,12 @@
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
-const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, targetIsCaller } = require("../acl/acl.js");
+const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, isInSameClan, targetIsCaller, determineClanConfig } = require("../acl/acl.js");
 const { updateSpreadsheet } = require("../sheets/sheets.js");
 const { setUserSyncTimestamp, setUserData } = require("../redis/redis.js");
 const { isHittingGlobalSyncRateLimit, isHittingUserSyncRateLimit } = require("../redis/ratelimit.js");
 const { login } = require("../lambda/lambda.js");
 
-const checkPermissions = interaction => {
+const checkPermissions = async (interaction) => {
     if (isCalledByOwner(interaction)) {
         return {
             allowed: true,
@@ -29,10 +29,12 @@ const checkPermissions = interaction => {
     }
 
     if (isCalledByClanAdmin(interaction)) {
-        return {
-            allowed: true,
-            reason: "Caller is a clan administrator",
-        };
+        if (await isInSameClan(interaction)) {
+            return {
+                allowed: true,
+                reason: "Caller is a clan administrator",
+            };
+        }
     }
 
     return {
@@ -42,7 +44,7 @@ const checkPermissions = interaction => {
 };
 
 const syncFunc = async (interaction) => {
-    const { allowed, reason } = checkPermissions(interaction);
+    const { allowed, reason } = await checkPermissions(interaction);
     if (!allowed) return interaction.followUp({
         content: reason,
         ephemeral: true,
@@ -54,7 +56,7 @@ const syncFunc = async (interaction) => {
     //     or via required boolean (ehh)
 
     // Determine target
-    const targetUser = interaction.options.getUser("target")  || interaction.member.user;
+    const targetUser = interaction.options.getUser("target") || interaction.member.user;
 
     // Check ratelimits
     if (await isHittingGlobalSyncRateLimit()) {
@@ -97,7 +99,9 @@ const syncFunc = async (interaction) => {
 
     // Write to spreadsheet
     try {
-        await updateSpreadsheet(responseBody);
+        // We should use target here but `isInSameClan` guarantees that member is OK
+        const config = determineClanConfig(interaction.member);
+        await updateSpreadsheet(config.name, responseBody);
     } catch (err) {
         console.error("Failed updating spreadsheet", err);
         interaction.followUp({
