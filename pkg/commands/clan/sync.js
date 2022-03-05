@@ -2,6 +2,7 @@ const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
 const { isCalledByOwner, isCalledByClanMember, isCalledByClanAdmin, AUTHORIZED_ROLES_LIST } = require("../../acl/acl.js");
 const { setUserSyncTimestamp, setUserData } = require("../../redis/redis.js");
+const { isHittingGlobalSyncRateLimit, isHittingUserSyncRateLimit } = require("../redis/ratelimit.js");
 const { updateSpreadsheet } = require("../../sheets/sheets.js");
 const { login } = require("../../lambda/lambda.js");
 
@@ -10,6 +11,8 @@ const STATUS_LOADING = "⚙️";
 const STATUS_FAILED = "❌";
 const STATUS_DONE = "✅";
 const STATUS_SKIP = "⏩";
+const STATUS_USER_RATELIMIT = "⏸";
+const STATUS_GLOBAL_RATELIMIT = "😩";
 
 const checkPermissions = interaction => {
     if (isCalledByOwner(interaction)) {
@@ -86,6 +89,16 @@ const clanSyncFunc = async (interaction) => {
         console.log("Updating", memberId);
         status[memberId] = STATUS_LOADING;
         await interaction.editReply(generateDashboardText());
+
+        // 3.0 Check Ratelimits
+        if (await isHittingGlobalSyncRateLimit()) {
+            status[memberId] = STATUS_GLOBAL_RATELIMIT;
+            continue;
+        }
+        if (await isHittingUserSyncRateLimit(memberId)) {
+            status[memberId] = STATUS_USER_RATELIMIT;
+            continue;
+        }
 
         // 3.1 Login
         let responseBody;
