@@ -2,7 +2,7 @@ const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
 const { SlashCommandBuilder } = require("@discordjs/builders");
 
-const { AUTHORIZED_USERS_LIST, AUTHORIZED_ROLES_LIST } = require("../pkg/acl/acl.js")
+const { clanConfigs, ownerDiscordId } = require("../pkg/config/config");
 const { linkSubCommand } = require("../pkg/commands/link.js");
 const { unlinkSubCommand } = require("../pkg/commands/unlink.js");
 const { statusSubCommand } = require("../pkg/commands/status.js");
@@ -26,22 +26,16 @@ const COMMANDS = new SlashCommandBuilder()
   .addSubcommandGroup(armorySubcommandGroup)
 
 const PERMISSIONS = [
-  ...AUTHORIZED_USERS_LIST.owner.map(id => ({
-    id: id,
+  {
+    id: ownerDiscordId,
     type: 1,
     permission: true,
-  })),
-  // Admins — can't add due to 10 permission max length
-  // ...AUTHORIZED_USERS_LIST.admin.map(id => ({
-  //   id: id,
-  //   type: 1,
-  //   permission: true,
-  // })),
-  {
-    id: AUTHORIZED_ROLES_LIST.member,
+  },
+  ...clanConfigs.map(clan => ({
+    id: clan.memberRoleId,
     type: 2,
     permission: true,
-  },
+  })),
 ];
 
 // Globals
