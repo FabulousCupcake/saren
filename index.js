@@ -39,7 +39,7 @@ const handler = async (interaction) => {
     const optionsText = interaction.options.data.options.map(o => `${o.name}: ${o.value}`).join(",");
 
     console.info(`${discordUserId} (${discordUserTag}): ${command} [${optionsText}]`);
-  })
+  })();
 
 
   try {
