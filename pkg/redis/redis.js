@@ -8,6 +8,7 @@ let asyncSet;
 const initializeRedisClient = async () => {
     redisClient = createClient({
         url: process.env.REDIS_URL,
+        disableOfflineQueue: true,
         retry_strategy: function(options) {
             if (options.error && options.error.code === "ECONNREFUSED") {
                 // End reconnecting on a specific error and flush all commands with
