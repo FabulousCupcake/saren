@@ -1,4 +1,5 @@
 const { create: createRedisRateLimiter } = require('redis-rate-limiter');
+const { getRedisClient } = require("./redis");
 
 const DEBUG = true;
 
@@ -68,9 +69,10 @@ const isHittingUserSyncRateLimit = (discordId) => {
     return retval;
 };
 
-const initializeRateLimiters = redisClient => {
-    initializeGlobalSyncRateLimit();
-    initializeUserSyncRateLimit();
+const initializeRateLimiters = () => {
+    redisClient = getRedisClient()
+    initializeGlobalSyncRateLimit(redisClient);
+    initializeUserSyncRateLimit(redisClient);
 }
 
 module.exports = {

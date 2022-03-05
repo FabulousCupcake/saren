@@ -71,8 +71,13 @@ const getUserSyncTimestamp = async (id) => {
     return await asyncGet(key);
 }
 
+const getRedisClient = () => {
+    return redisClient;
+}
+
 module.exports = {
     initializeRedisClient,
+    getRedisClient,
     setUserSyncTimestamp,
     getUserSyncTimestamp,
     setArmoryText,
