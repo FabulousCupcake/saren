@@ -55,7 +55,7 @@ const handler = async (interaction) => {
     const discordUserTag = interaction.user.tag;
     const optionsText = optionsToText(interaction.options.data);
 
-    console.info(`${discordUserId} (${discordUserTag}): ${command}: ${optionsText}`);
+    console.info(`${discordUserId} (${discordUserTag}): ${optionsText}`);
   })();
 
 
