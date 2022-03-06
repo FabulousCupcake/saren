@@ -85,7 +85,9 @@ const main = async () => {
 
 // Do not crash on error
 process.on('uncaughtException', function (err) {
-  console.error("!!!", err);
+  console.log("!!!");
+  console.error(err);
+  console.log("---")
   console.error(err.stack);
   console.log("---")
 });
