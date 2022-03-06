@@ -25,6 +25,8 @@ const send = async (command, args) => {
     const response = await client.send(invokeCommand);
 
     // Check if Suzume returns or contains errors
+    console.log("send response", response);
+    console.log("send errormessage", response.errorMessage);
     if (response.errorMessage) {
         console.error("Suzume returned error!");
         throw response;
