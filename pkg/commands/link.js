@@ -42,6 +42,13 @@ const linkFunc = async (interaction) => {
     const accountId = interaction.options.getString("id");
     const accountPassword = interaction.options.getString("password");
 
+    // Validate inputs
+    if (accountId.length !== 9) return interaction.followUp({
+        content: "Account ID looks incorrect! Please check and try again!",
+        ephemeral: true,
+    });
+
+    // Delegate to Suzume
     let responseBody;
     try {
         responseBody = await register(targetUser.id, accountId, accountPassword);
