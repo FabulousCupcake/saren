@@ -34,9 +34,6 @@ const send = async (command, args) => {
     }
 
     // Check if Suzume returns or contains errors
-    console.log("send response", response);
-    console.log("send payload", payload);
-    console.log("send payload errormessage", payload.errorMessage);
     if (payload.errorMessage) {
         console.error("Suzume returned error!");
         throw payload;
