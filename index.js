@@ -83,4 +83,11 @@ const main = async () => {
   client.login(TOKEN);
 }
 
+// Do not crash on error
+process.on('uncaughtException', function (err) {
+  console.error("!!!", err);
+  console.error(err.stack);
+  console.log("---")
+});
+
 main();
