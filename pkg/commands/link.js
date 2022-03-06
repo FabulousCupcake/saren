@@ -44,8 +44,7 @@ const linkFunc = async (interaction) => {
 
     let responseBody;
     try {
-        const response = await register(targetUser.id, accountId, accountPassword);
-        responseBody = JSON.parse(Buffer.from(response.Payload).toString());
+        const responseBody = await register(targetUser.id, accountId, accountPassword);
     } catch (err) {
         console.error("Failed lambda call:", err);
         interaction.followUp({

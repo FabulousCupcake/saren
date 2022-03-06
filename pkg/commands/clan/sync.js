@@ -116,8 +116,7 @@ const clanSyncFunc = async (interaction) => {
         // 3.1 Login
         let responseBody;
         try {
-            const response = await login(memberId);
-            responseBody = JSON.parse(Buffer.from(response.Payload).toString());
+            responseBody = await login(memberId);
         } catch (err) {
             console.error("Failed lambda call", err);
             status[memberId] = STATUS_FAILED;

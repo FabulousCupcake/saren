@@ -23,16 +23,26 @@ const send = async (command, args) => {
         LogType: "None",
     });
     const response = await client.send(invokeCommand);
+    let payload;
+
+    // Parse JSON response from Suzume
+    try {
+        payload = JSON.parse(Buffer.from(response.Payload).toString());
+    } catch (err) {
+        console.error("Failed parsing JSON response from Suzume!");
+        throw err;
+    }
 
     // Check if Suzume returns or contains errors
     console.log("send response", response);
-    console.log("send errormessage", response.errorMessage);
-    if (response.errorMessage) {
+    console.log("send payload", payload);
+    console.log("send payload errormessage", payload.errorMessage);
+    if (payload.errorMessage) {
         console.error("Suzume returned error!");
-        throw response;
+        throw payload;
     }
 
-    return response;
+    return payload;
 }
 
 const register = async (discordId, accountId, password) => {
