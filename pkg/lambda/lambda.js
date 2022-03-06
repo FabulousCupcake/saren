@@ -22,7 +22,15 @@ const send = async (command, args) => {
         }),
         LogType: "None",
     });
-    return await client.send(invokeCommand);
+    const response = await client.send(invokeCommand);
+
+    // Check if Suzume returns or contains errors
+    if (response.errorMessage) {
+        console.error("Suzume returned error!");
+        throw response;
+    }
+
+    return response;
 }
 
 const register = async (discordId, accountId, password) => {
