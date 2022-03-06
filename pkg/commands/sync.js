@@ -77,7 +77,7 @@ const syncFunc = async (interaction) => {
     // Delegate to Suzume
     let responseBody;
     try {
-        const responseBody = await login(targetUser.id);
+        responseBody = await login(targetUser.id);
     } catch (err) {
         console.error("Failed lambda call", err);
         interaction.followUp({

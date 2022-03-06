@@ -35,7 +35,7 @@ const unlinkFunc = async (interaction) => {
 
     let responseBody;
     try {
-        const responseBody = await disable(targetUser.id);
+        responseBody = await disable(targetUser.id);
     } catch (err) {
         console.error("Failed lambda call", err);
         interaction.followUp({
