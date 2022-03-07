@@ -59,6 +59,7 @@ const updateSpreadsheet = async (clanName, responseBody) => {
     const username = responseBody.user_info.user_name;
 
     // Do we need to create new sheet from template?
+    doc.resetLocalCache()
     await doc.loadInfo();
     if (!doc.sheetsByTitle[username]) {
         await newFromTemplate(doc, username);
