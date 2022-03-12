@@ -73,8 +73,11 @@ const clanQueryFunc = async (interaction) => {
             data = "Too Large!";
         }
 
+        console.log("debug");
+        console.log(qr);
+
         message.push(`${index}.`);
-        message.push(`<@!${qr.member.id}>\n`);
+        message.push(`<@!${qr.member?.id}>\n`);
         message.push(`\`\`\`json\n${data}\n\`\`\``)
 
         return message.join(" ");
