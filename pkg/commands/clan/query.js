@@ -60,9 +60,6 @@ const clanQueryFunc = async (interaction) => {
                 data: "No Data",
             });
         }
-        console.log("debug");
-        console.log(memberId);
-        console.log(data);
 
         // Run jsonpath query
         let queriedData;
