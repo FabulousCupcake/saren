@@ -49,7 +49,7 @@ const clanQueryFunc = async (interaction) => {
     // 3. Run jsonpath query against all data
     let queryResults;
     try {
-        queryResults = clanMembersData(cmd => ({
+        queryResults = clanMembersData.map(cmd => ({
             member: cmd.member,
             data: jsonpath.query(cmd.data, jsonpathQuery),
         }));
