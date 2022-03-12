@@ -83,7 +83,7 @@ const clanQueryFunc = async (interaction) => {
         }
 
         message.push(`${index}.`);
-        message.push(`<@!${qr.member?.id}>\n`);
+        message.push(`<@!${qr.id}>\n`);
         message.push(`\`\`\`json\n${data}\n\`\`\``)
 
         return message.join(" ");
