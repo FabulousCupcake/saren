@@ -107,7 +107,7 @@ const clanQueryFunc = async (interaction) => {
     }));
 
     interaction.followUp({
-        content: await messages.join("\n\n"),
+        content: await messages.join("\n"),
         ephemeral: true,
     });
 }
