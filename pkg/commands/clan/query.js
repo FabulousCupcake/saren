@@ -49,8 +49,6 @@ const clanQueryFunc = async (interaction) => {
         .sort((a, b) => a.s - b.s)
         .map(({ v }) => v);
     for (const memberId of memberIds) {
-        console.log("debug");
-        console.log(memberId);
         const data = await getUserData(memberId);
 
         // No data / non linked members
