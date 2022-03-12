@@ -41,7 +41,7 @@ const clanQueryFunc = async (interaction) => {
     const clanMembers = allMembers.filter(m => m.roles.cache.has(clanConfig.memberRoleId));
 
     // 2. Fetch last sync response body and query
-    let queryResults;
+    let queryResults = [];
     for (const clanMember of clanMembers) {
         const data = await getUserData(clanMember.id);
 
