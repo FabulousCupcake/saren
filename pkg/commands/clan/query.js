@@ -65,13 +65,26 @@ const clanQueryFunc = async (interaction) => {
         // Run jsonpath query
         let queriedData;
         try {
-            queriedData = jsonpath.query(data, jsonpathQuery);
+            queriedData = jsonpath.query(data, jsonpathQuery)[0];
         } catch (err) {
             console.error("Failed running jsonpath query", jsonpathQuery, err);
             return interaction.followUp({
                 content: `Failed executing query!\n${err.message}`,
                 ephemeral: true,
             });
+        }
+
+        // If Object, Stringify and wrap in codeblock
+        if (typeof queriedData === "object") {
+            queriedData = JSON.stringify(queriedData, null, 2);
+            queriedData = `\n\`\`\`json\n${queriedData}\`\`\``;
+        } else {
+            queriedData = `\`${queriedData}\``;
+        }
+
+        // Check if too large
+        if (queriedData.length > 100) {
+            queriedData = "Too Large!";
         }
 
         // Push to results list
@@ -86,14 +99,9 @@ const clanQueryFunc = async (interaction) => {
     const messages = await Promise.all(queryResults.map(async (qr) => {
         index++;
         const message = [];
-        const data = JSON.stringify(qr.data, null, 2);
-        if (data.length > 100) {
-            data = "Too Large!";
-        }
-
         message.push(`${index}.`);
-        message.push(`<@!${qr.id}>\n`);
-        message.push(`\`\`\`json\n${data}\n\`\`\``)
+        message.push(`<@!${qr.id}>:`);
+        message.push(qr.data);
 
         return message.join(" ");
     }));
