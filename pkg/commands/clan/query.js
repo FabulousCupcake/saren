@@ -56,7 +56,7 @@ const clanQueryFunc = async (interaction) => {
         // Run jsonpath query
         let queriedData;
         try {
-            queriedData = jsonpath.query(cmd.data, jsonpathQuery);
+            queriedData = jsonpath.query(data, jsonpathQuery);
         } catch (err) {
             console.error("Failed running jsonpath query", jsonpathQuery, err);
             return interaction.followUp({
