@@ -46,6 +46,10 @@ const clanQueryFunc = async (interaction) => {
         data: await getUserData(cm.id),
     }));
 
+    console.log('debug');
+    console.log(typeof clanMembersData[0].data);
+    console.log(clanMembersData[0].data);
+
     // 3. Run jsonpath query against all data
     let queryResults;
     try {
