@@ -42,18 +42,26 @@ const clanQueryFunc = async (interaction) => {
 
     // 2. Fetch last sync response body and query
     let queryResults = [];
-    for (const clanMember of clanMembers) {
-        const data = await getUserData(clanMember.id);
+
+    const memberIds = clanMembers
+        .map(m => m.id)
+        .map(x => ({ v: x, s: Math.random() }))
+        .sort((a, b) => a.s - b.s)
+        .map(({ v }) => v);
+    for (const memberId of memberIds) {
+        console.log("debug");
+        console.log(memberId);
+        const data = await getUserData(memberId);
 
         // No data / non linked members
         if (!data) {
             queryResults.push({
-                id: clanMember.id,
+                id: memberId,
                 data: "No Data",
             });
         }
         console.log("debug");
-        console.log(clanMember.id);
+        console.log(memberId);
         console.log(data);
 
         // Run jsonpath query
@@ -70,7 +78,7 @@ const clanQueryFunc = async (interaction) => {
 
         // Push to results list
         queryResults.push({
-            id: clanMember.id,
+            id: memberId,
             data: queriedData,
         });
     }
