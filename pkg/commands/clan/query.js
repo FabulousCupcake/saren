@@ -81,7 +81,7 @@ const clanQueryFunc = async (interaction) => {
         }
 
         // Check if too large
-        if (queriedData.length > 100) {
+        if (queriedData.length > 65) {
             queriedData = "Too Large!";
         }
 
