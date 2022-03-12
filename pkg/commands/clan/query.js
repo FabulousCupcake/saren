@@ -40,9 +40,6 @@ const clanQueryFunc = async (interaction) => {
     const allMembers = await interaction.guild.members.fetch({ force: true });
     const clanMembers = allMembers.filter(m => m.roles.cache.has(clanConfig.memberRoleId));
 
-    console.log('debug');
-    console.log(clanMembers);
-
     // 2. Fetch last sync response body
     const clanMembersData = clanMembers.map(async (cm) => ({
         member: cm,
@@ -54,7 +51,9 @@ const clanQueryFunc = async (interaction) => {
     try {
         queryResults = clanMembersData.map(cmd => ({
             member: cmd.member,
-            data: jsonpath.query(cmd.data, jsonpathQuery),
+            data: (cmd.data) ?
+                jsonpath.query(cmd.data, jsonpathQuery) :
+                "No Data",
         }));
     } catch (err) {
         console.error("Failed running jsonpath query", jsonpathQuery, err);
