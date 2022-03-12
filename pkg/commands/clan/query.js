@@ -40,30 +40,39 @@ const clanQueryFunc = async (interaction) => {
     const allMembers = await interaction.guild.members.fetch({ force: true });
     const clanMembers = allMembers.filter(m => m.roles.cache.has(clanConfig.memberRoleId));
 
-    // 2. Fetch last sync response body
-    const clanMembersData = clanMembers.map(async (cm) => ({
-        member: cm,
-        data: await getUserData(cm.id),
-    }));
-
-    // 3. Run jsonpath query against all data
+    // 2. Fetch last sync response body and query
     let queryResults;
-    try {
-        queryResults = clanMembersData.map(cmd => ({
-            member: cmd.member,
-            data: (cmd.data) ?
-                jsonpath.query(cmd.data, jsonpathQuery) :
-                "No Data",
-        }));
-    } catch (err) {
-        console.error("Failed running jsonpath query", jsonpathQuery, err);
-        return interaction.followUp({
-            content: `Failed executing query!\n${err.message}`,
-            ephemeral: true,
+    for (const clanMember of clanMembers) {
+        const data = await getUserData(clanMember.id);
+
+        // No data / non linked members
+        if (!data) {
+            queryResults.push({
+                id: clanMember.id,
+                data: "No Data",
+            });
+        }
+
+        // Run jsonpath query
+        let queriedData;
+        try {
+            queriedData = jsonpath.query(cmd.data, jsonpathQuery);
+        } catch (err) {
+            console.error("Failed running jsonpath query", jsonpathQuery, err);
+            return interaction.followUp({
+                content: `Failed executing query!\n${err.message}`,
+                ephemeral: true,
+            });
+        }
+
+        // Push to results list
+        queryResults.push({
+            id: clanMember.id,
+            data: queriedData,
         });
     }
 
-    // 4. Build message
+    // 3. Build message
     let index = 0;
     const messages = await Promise.all(queryResults.map(async (qr) => {
         index++;
@@ -72,9 +81,6 @@ const clanQueryFunc = async (interaction) => {
         if (data.length > 100) {
             data = "Too Large!";
         }
-
-        console.log("debug");
-        console.log(qr);
 
         message.push(`${index}.`);
         message.push(`<@!${qr.member?.id}>\n`);
