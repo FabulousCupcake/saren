@@ -28,12 +28,12 @@ const COMMANDS = new SlashCommandBuilder()
 const PERMISSIONS = [
   {
     id: ownerDiscordId,
-    type: 1,
+    type: 2,
     permission: true,
   },
   ...clanConfigs.map(clan => ({
     id: clan.memberRoleId,
-    type: 2,
+    type: 1,
     permission: true,
   })),
 ];
