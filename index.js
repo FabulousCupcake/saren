@@ -15,7 +15,7 @@ const readyHandler = () => console.log(`Logged in as ${client.user.tag}!`);
 
 const handler = async (interaction) => {
   // Killswitch for 25 March 2022 update
-  if (Date.new().getTime() > 1648170000000) {
+  if (new Date().getTime() > 1648170000000) {
     interaction.reply({
       content: "I'm away on vacation! Please come again some time later!",
       ephemeral: true,
