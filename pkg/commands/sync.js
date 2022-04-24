@@ -104,7 +104,7 @@ const syncFunc = async (interaction) => {
     } catch (err) {
         console.error("Failed updating spreadsheet", err);
         interaction.followUp({
-            content: "Oh no! I was writing down the data from Suzume but the sheets got blown away by the wind!",
+            content: "Oh no! I was writing down the data from Suzume, but the wind blew away the sheets!",
             ephemeral: true,
         });
         return;
