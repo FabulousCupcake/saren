@@ -39,7 +39,7 @@ const handler = async (interaction) => {
   }
 
   // Tell discord that we ACKed
-  interaction.deferReply({ ephemeral: true });
+  await interaction.deferReply({ ephemeral: true });
 
   // Log it
   (function() {
