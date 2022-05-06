@@ -38,7 +38,7 @@ const armoryCopyFunc = async (interaction) => {
   // Abort if empty
   if (!armoryText) {
     return interaction.followUp({
-      content: `<@!${interaction.targetUser.id} doesn't seem to have any saved armory text!`,
+      content: `<@!${interaction.targetUser.id}> doesn't seem to have any saved armory text!`,
       ephemeral: true,
     });
   }
