@@ -47,7 +47,7 @@ const armoryCopyFunc = async (interaction) => {
 
 const armoryCopyContextMenuCommand = new ContextMenuCommandBuilder()
   .setDefaultPermission(false)
-  .setName("Copy Armory Unit Target Ranks")
+  .setName("Copy Armory Text")
   .setType(ApplicationCommandType.User)
 
 module.exports = {
