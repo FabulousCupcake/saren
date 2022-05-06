@@ -109,6 +109,8 @@ const handler = async (interaction) => {
   //   return;
   // }
 
+  console.log(interaction.type);
+
   if (interaction.isApplicationCommand()) {
     return await commandHandler(interaction);
   }
