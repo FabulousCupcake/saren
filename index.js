@@ -109,11 +109,11 @@ const handler = async (interaction) => {
   //   return;
   // }
 
-  if (interaction.isCommand()) {
+  if (interaction.isApplicationCommand()) {
     return await commandHandler(interaction);
   }
 
-  if (interaction.isContextMenu()) {
+  if (interaction.isUserContextMenu()) {
     return await contextMenuHandler(interaction);
   }
 
