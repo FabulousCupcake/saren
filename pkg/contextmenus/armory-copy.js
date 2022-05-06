@@ -40,7 +40,7 @@ const armoryCopyFunc = async (interaction) => {
 
   // Reply
   interaction.followUp({
-    content: `I've written down your saved armorytext to be the same as <@!${interaction.targetUser.id}>'s!`,
+    content: `I've copied <@!${interaction.targetUser.id}>'s armory target ranks!`,
     ephemeral: true,
   });
 }
