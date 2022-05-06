@@ -10,11 +10,13 @@ const { syncSubCommand } = require("../pkg/commands/sync.js");
 const { clanSubcommandGroup } = require("../pkg/commands/clan");
 const { armorySubcommandGroup } = require("../pkg/commands/armory");
 
+const { armoryCopyContextMenuCommand } = require ("../pkg/contextmenus/armory-copy");
+
 // Constants
 const TOKEN = process.env.DISCORD_TOKEN;
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
 const GUILD_ID = process.env.DISCORD_GUILD_ID;
-const COMMANDS = new SlashCommandBuilder()
+const SLASH_COMMAND = new SlashCommandBuilder()
   .setName("saren")
   .setDescription("Princess Connect! Re:Dive Credentials Management Bot")
   .setDefaultPermission(false)
@@ -24,6 +26,16 @@ const COMMANDS = new SlashCommandBuilder()
   .addSubcommand(syncSubCommand)
   .addSubcommandGroup(clanSubcommandGroup)
   .addSubcommandGroup(armorySubcommandGroup)
+  .toJSON()
+
+const CONTEXT_MENU_COMMANDS = [
+  armoryCopyContextMenuCommand.toJSON(),
+];
+
+const COMMANDS = [
+  SLASH_COMMAND,
+  ...CONTEXT_MENU_COMMANDS,
+];
 
 const PERMISSIONS = [
   {
@@ -44,12 +56,12 @@ const rest = new REST({ version: '9' }).setToken(TOKEN);
 // registerCommands registers command json and returns command id
 const registerCommands = async () => {
   console.log("==> Command JSON:");
-  console.log(JSON.stringify(COMMANDS.toJSON(), null, 2));
+  console.log(JSON.stringify(COMMANDS, null, 2));
 
   console.log('==> Registering slash commands...');
   const res = await rest.put(
     Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
-    { body: [ COMMANDS.toJSON() ] },
+    { body: COMMANDS },
   );
   console.log('==> Successfully registered slash commands!');
 

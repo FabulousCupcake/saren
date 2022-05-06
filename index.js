@@ -6,6 +6,7 @@ const { initializeRateLimiters } = require("./pkg/redis/ratelimit.js");
 const { initializeLambdaClient } = require("./pkg/lambda/lambda.js");
 const { initializeSpreadsheetClient } = require("./pkg/sheets/sheets.js");
 const { initializeCommands } = require("./pkg/commands");
+const { initializeContextMenus } = require("./pkg/contextmenus");
 
 const TOKEN = process.env.DISCORD_TOKEN;
 
@@ -13,17 +14,7 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_
 
 const readyHandler = () => console.log(`Logged in as ${client.user.tag}!`);
 
-const handler = async (interaction) => {
-  // Killswitch for 25 March 2022 update
-  // if (new Date().getTime() > 1648170000000) {
-  //   interaction.reply({
-  //     content: "I'm away on vacation! Please come again some time later!",
-  //     ephemeral: true,
-  //   });
-  //   return;
-  // }
-
-  if (!interaction.isCommand()) return;
+const commandHandler = async (interaction) => {
   if (interaction.commandName !== "saren") return;
 
   const subcommand = interaction.options.getSubcommand();
@@ -77,6 +68,56 @@ const handler = async (interaction) => {
     });
     console.error(err, interaction);
   }
+}
+
+const contextMenuHandler = async (interaction) => {
+  const commandName = interaction.commandName;
+  const commandFunc = client.commands.get(commandName);
+
+  if (!commandFunc) {
+    console.warn("Unknown command", subcommand, interaction);
+    return;
+  }
+
+  // Tell discord that we ACKed
+  await interaction.deferReply({ ephemeral: true });
+
+  // Log it
+  const discordUserId = interaction.user.id;
+  const discordUserTag = interaction.user.tag;
+  console.info(`${discordUserId} (${discordUserTag}): ${commandName} ${interaction.targetUser.id}`);
+
+  // Exec it
+  try {
+    commandFunc(interaction);
+  } catch (err) {
+    interaction.followUp({
+      content: "Oops! Something went wrong!",
+      ephemeral: true,
+    });
+    console.error(err, interaction);
+  }
+}
+
+const handler = async (interaction) => {
+  // Killswitch for 25 March 2022 update
+  // if (new Date().getTime() > 1648170000000) {
+  //   interaction.reply({
+  //     content: "I'm away on vacation! Please come again some time later!",
+  //     ephemeral: true,
+  //   });
+  //   return;
+  // }
+
+  if (interaction.isCommand()) {
+    return await commandHandler(interaction);
+  }
+
+  if (interaction.isContextMenu()) {
+    return await contextMenuHandler(interaction);
+  }
+
+  return;
 };
 
 const main = async () => {
@@ -86,6 +127,7 @@ const main = async () => {
   initializeLambdaClient();
   initializeSpreadsheetClient();
   initializeCommands(client);
+  initializeContextMenus(client);
 
   client.on("ready", readyHandler);
   client.on("interactionCreate", handler);
