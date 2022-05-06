@@ -111,10 +111,6 @@ const handler = async (interaction) => {
 
   if (!interaction.isApplicationCommand()) return;
 
-  console.log("is command?", interaction.isCommand());
-  console.log("is context menu?", interaction.isContextMenu());
-  console.log("is user context menu?", interaction.isUserContextMenu());
-
   if (interaction.isCommand()) {
     return await commandHandler(interaction);
   }
