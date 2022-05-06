@@ -60,7 +60,7 @@ const commandHandler = async (interaction) => {
 
 
   try {
-    commandFunc(interaction);
+    await commandFunc(interaction);
   } catch (err) {
     interaction.followUp({
       content: "Oops! Something went wrong!",
@@ -89,7 +89,7 @@ const contextMenuHandler = async (interaction) => {
 
   // Exec it
   try {
-    commandFunc(interaction);
+    await commandFunc(interaction);
   } catch (err) {
     interaction.followUp({
       content: "Oops! Something went wrong!",
