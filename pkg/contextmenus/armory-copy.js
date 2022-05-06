@@ -35,6 +35,14 @@ const armoryCopyFunc = async (interaction) => {
   // Obtain armorytext from target user
   const armoryText = await getArmoryText(interaction.targetUser.id);
 
+  // Abort if empty
+  if (!armoryText) {
+    return interaction.followUp({
+      content: `<@!${interaction.targetUser.id} doesn't seem to have any saved armory text!`,
+      ephemeral: true,
+    });
+  }
+
   // Set it
   await setArmoryText(interaction.member.id, armoryText);
 
