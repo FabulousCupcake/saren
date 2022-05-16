@@ -42,6 +42,15 @@ const importArmoryTextFunc = async (interaction) => {
         return;
     }
 
+    // Check if it has https:// and print nice error
+    if (armoryText.includes("https://")) {
+        interaction.followUp({
+            content: "I see a URL in your input! I only accept raw armory text!",
+            ephemeral: true,
+        });
+        return;
+    }
+
     await setArmoryText(interaction.member.id, armoryText);
     interaction.followUp({
         content: "I've written down your armory text!",
