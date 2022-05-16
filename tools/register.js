@@ -5,6 +5,7 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 const { clanConfigs, ownerDiscordId } = require("../pkg/config/config");
 const { linkSubCommand } = require("../pkg/commands/link.js");
 const { unlinkSubCommand } = require("../pkg/commands/unlink.js");
+const { sheetSubCommand } = require("../pkg/commands/sheet.js");
 const { statusSubCommand } = require("../pkg/commands/status.js");
 const { syncSubCommand } = require("../pkg/commands/sync.js");
 const { clanSubcommandGroup } = require("../pkg/commands/clan");
@@ -22,6 +23,7 @@ const SLASH_COMMAND = new SlashCommandBuilder()
   .setDefaultPermission(false)
   .addSubcommand(linkSubCommand)
   .addSubcommand(unlinkSubCommand)
+  .addSubcommand(sheetSubCommand)
   .addSubcommand(statusSubCommand)
   .addSubcommand(syncSubCommand)
   .addSubcommandGroup(clanSubcommandGroup)
