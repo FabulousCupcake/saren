@@ -36,7 +36,7 @@ const sheetFunc = async (interaction) => {
 
     // Send message
     interaction.followUp({
-        content: `Your clan's roster sheet URL is: ${url}`,
+        content: `Your clan's roster sheet URL is: <${url}>`,
         ephemeral: true,
     });
 }
