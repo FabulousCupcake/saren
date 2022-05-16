@@ -11,8 +11,8 @@ let userSyncRateLimiter;
 const initializeGlobalSyncRateLimit = (redisClient) => {
     const limit = createRedisRateLimiter({
         redis: redisClient,
-        window: 3600,
-        limit: 100,
+        window: 6 * 3600,
+        limit: 120,
         key: () => "global-sync",
     });
     globalSyncRateLimiter = promisify(limit);
@@ -21,7 +21,7 @@ const initializeGlobalSyncRateLimit = (redisClient) => {
 const initializeUserSyncRateLimit = (redisClient) => {
     const limit = createRedisRateLimiter({
         redis: redisClient,
-        window: 7200,
+        window: 2 * 3600,
         limit: 2,
         key: (discordId) => `user-sync-${discordId}`,
     });
