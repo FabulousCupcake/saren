@@ -2,6 +2,7 @@ const { Collection } = require('discord.js');
 
 const { linkFunc } = require("./link");
 const { unlinkFunc } = require("./unlink");
+const { sheetFunc } = require("./sheet");
 const { statusFunc } = require("./status");
 const { syncFunc } = require("./sync");
 
@@ -15,6 +16,7 @@ const initializeCommands = client => {
 
   client.commands.set("link", linkFunc);
   client.commands.set("unlink", unlinkFunc);
+  client.commands.set("sheet", sheetFunc);
   client.commands.set("status", statusFunc);
   client.commands.set("sync", syncFunc);
 
