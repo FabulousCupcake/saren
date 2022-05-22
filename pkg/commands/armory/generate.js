@@ -2,7 +2,7 @@ const https = require('https');
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const { SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 
-const { isCalledByOwner, isCalledByClanMember, isInSameClan } = require("../../acl/acl.js");
+const { isCalledByOwner, isCalledByClanMember } = require("../../acl/acl.js");
 const { getArmoryText, getUserData, getUserSyncTimestamp } = require("../../redis/redis.js");
 const { relatime } = require("../../utils/format.js");
 const { transformToArmorySerializationText } = require("./armory.js");
@@ -91,11 +91,12 @@ const generateArmoryTextFunc = async (interaction) => {
         ephemeral: true,
     });
 
-    // Determine target
-    const targetUser = interaction.options.getUser("target") || interaction.member.user;
+    // Determine target & account
+    const accountDataUser = interaction.options.getUser("account") || interaction.member.user;
+    const targetRankUser = interaction.options.getUser("target") || accountDataUser;
 
     // Fetch last sync response body
-    const responseBody = await getUserData(targetUser.id);
+    const responseBody = await getUserData(accountDataUser.id);
     if (!responseBody) {
         interaction.followUp({
             content: "I can't find your data! Please run sync first and try again!",
@@ -106,11 +107,11 @@ const generateArmoryTextFunc = async (interaction) => {
 
     // Get last sync timestamp and transform into relative time format
     const currentTimestamp = new Date().getTime();
-    const lastSyncTimestamp = await getUserSyncTimestamp(targetUser.id);
+    const lastSyncTimestamp = await getUserSyncTimestamp(accountDataUser.id);
     const timestamp = relatime(lastSyncTimestamp - currentTimestamp);
 
     // Generate armory text
-    const armoryTargetText = await getArmoryText(targetUser.id);
+    const armoryTargetText = await getArmoryText(targetRankUser.id);
     const armoryText = transformToArmorySerializationText(responseBody, armoryTargetText);
 
     // Build message component
@@ -126,11 +127,17 @@ const generateArmoryTextFunc = async (interaction) => {
     }
 
     // Build embed
-    const messageEmbed = new MessageEmbed()
-        .setAuthor(targetUser.username, targetUser.avatarURL())
-        .setDescription(armoryText)
-        .setColor("F55291")
-        .setFooter(`Generated with data from ${timestamp}`);
+    const messageEmbed = new MessageEmbed({
+        author: {
+            name: accountDataUser.username,
+            iconURL: accountDataUser.avatarURL()
+        },
+        description: armoryText,
+        color: "F55291",
+        footer: {
+            text: `Generated with data from ${timestamp}`
+        },
+    });
 
     // Send reply
     interaction.followUp({
@@ -143,11 +150,16 @@ const generateArmoryTextFunc = async (interaction) => {
 
 const generateArmoryTextSubCommand = new SlashCommandSubcommandBuilder()
     .setName("generate")
-    .setDescription("Generates pcredivewiki.tw armory import text.")
+    .setDescription("Generates pcredivewiki.tw armory text")
+    .addUserOption(option =>
+        option
+        .setName("account")
+        .setDescription("The discord user whose account data should be exported")
+        .setRequired(false))
     .addUserOption(option =>
         option
         .setName("target")
-        .setDescription("The discord user whose account data should be exported")
+        .setDescription("A discord user whose armory target ranks data should be used")
         .setRequired(false))
 
 module.exports = {
