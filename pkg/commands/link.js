@@ -4,6 +4,11 @@ const { isCalledByOwner, isCalledByClanMember, targetIsCaller } = require("../ac
 const { register } = require("../lambda/lambda.js");
 
 const checkPermissions = interaction => {
+    return {
+        allowed: false,
+        reason: "This command is disabled temporarily!",
+    }
+
     if (isCalledByOwner(interaction)) {
         return {
             allowed: true,
