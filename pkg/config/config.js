@@ -19,10 +19,18 @@ const VERMILION = {
     spreadsheetId: "1lcAmLWOPxLsUf42wpFDwGON5opKgZ5-rUEshOz43UGY",
 };
 
+const VVEEPO = {
+    name: "VVeepo",
+    adminRoleId: "947923764832792616",
+    memberRoleId: "947865117306024016",
+    spreadSheetId: "1KNW18b-SmS3uLMT8YXiydGqe7dDF6fLdk64ntJGxnMY",
+};
+
 const clanConfigs = [
     VANILLA,
     VIRIDIAN,
     VERMILION,
+    VVEEPO,
 ];
 
 const ownerDiscordId = "109729829670154240";
