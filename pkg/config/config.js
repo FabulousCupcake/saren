@@ -23,7 +23,7 @@ const VVEEPO = {
     name: "VVeepo",
     adminRoleId: "947923764832792616",
     memberRoleId: "947865117306024016",
-    spreadSheetId: "1KNW18b-SmS3uLMT8YXiydGqe7dDF6fLdk64ntJGxnMY",
+    spreadsheetId: "1KNW18b-SmS3uLMT8YXiydGqe7dDF6fLdk64ntJGxnMY",
 };
 
 const clanConfigs = [
