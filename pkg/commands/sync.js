@@ -50,13 +50,6 @@ const syncFunc = async (interaction) => {
         ephemeral: true,
     });
 
-    // Disable
-    interaction.followUp({
-        content: `Suzume is currently busy! Please come back later!`,
-        ephemeral: true,
-    });
-    return;
-
     // TODO: Clan battle toggle check
     // Make it harder to accidantally sync during CB, requiring explicit approval/confirmation
     // Either via Message Component button

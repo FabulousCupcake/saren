@@ -49,13 +49,6 @@ const clanSyncFunc = async (interaction) => {
         ephemeral: true,
     });
 
-    // Disable
-    interaction.followUp({
-        content: `Suzume is currently busy! Please come back later!`,
-        ephemeral: true,
-    });
-    return;
-
     // TODO
     // 0. Identify Caller's Clan
     const clanConfig = determineClanConfig(interaction.member);
