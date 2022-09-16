@@ -31,13 +31,6 @@ const unlinkFunc = async (interaction) => {
         ephemeral: true,
     });
 
-    // Disable
-    interaction.followUp({
-        content: `Suzume is currently busy! Please come back later!`,
-        ephemeral: true,
-    });
-    return;
-
     const targetUser = interaction.options.getUser("target");
 
     let responseBody;
