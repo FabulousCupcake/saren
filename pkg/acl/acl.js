@@ -12,7 +12,10 @@ const determineClanConfig = member => {
     const manchoId = "182305985589673984";
     if (member.user.id == manchoId) {
         console.debug(`Forcing clan to be Vanilla!`);
-        return clanConfigs.filter(clan => clan.name === "Vanilla");
+        const clan = clanConfigs.filter(clan => clan.name === "Vanilla");
+        console.debug(clanConfigs);
+        console.debug(clan);
+        return clan;
     }
 
     // In 0 clan, refuse
