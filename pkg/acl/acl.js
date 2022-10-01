@@ -8,6 +8,12 @@ const determineClanConfig = member => {
     });
     console.debug(`acl: ${member.user.tag} is part of: ${configs.map(c => c.name)}`);
 
+    // If MonchoStrife#1504, hardcode return vanilla
+    const manchoId = "182305985589673984";
+    if (member.id == manchoId) {
+        return clanConfigs.VANILLA;
+    }
+
     // In 0 clan, refuse
     if (configs.length === 0) return false;
 
