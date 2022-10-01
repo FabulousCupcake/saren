@@ -5,13 +5,6 @@ const VANILLA = {
     spreadsheetId: "1tpbLmB4Fha_0TpMd4h3d2xmpf_GztvpFP_DFmdaOHfM",
 };
 
-const VIRIDIAN = {
-    name: "Viridian",
-    adminRoleId: "923091835667234847",
-    memberRoleId: "923090620019535902",
-    spreadsheetId: "1nwXQZyGopqAsYi9uUZkDfOO9RcZtZe_wxsauWVd2hHY",
-};
-
 const VVEEPO = {
     name: "VVeepo",
     adminRoleId: "947923764832792616",
@@ -21,7 +14,6 @@ const VVEEPO = {
 
 const clanConfigs = [
     VANILLA,
-    VIRIDIAN,
     VVEEPO,
 ];
 
