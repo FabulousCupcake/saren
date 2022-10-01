@@ -10,7 +10,7 @@ const determineClanConfig = member => {
 
     // If MonchoStrife#1504, hardcode return vanilla
     const manchoId = "182305985589673984";
-    if (member.id == manchoId) {
+    if (member.user.id == manchoId) {
         return clanConfigs.VANILLA;
     }
 
