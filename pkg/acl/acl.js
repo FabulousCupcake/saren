@@ -11,6 +11,8 @@ const determineClanConfig = member => {
     // If MonchoStrife#1504, hardcode return vanilla
     const manchoId = "109729829670154240";
     console.debug(member.user.id);
+    console.debug(clanConfigs);
+    console.debug(clanConfigs.VANILLA);
     if (member.user.id == manchoId) {
         console.debug(`Forcing clan to be Vanilla!`);
         return clanConfigs.VANILLA;
