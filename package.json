@@ -11,7 +11,10 @@
   "main": "index.js",
   "scripts": {
     "register": "node tools/register.js",
-    "start": "bun index.js"
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "16.x"
   },
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.42.0",
