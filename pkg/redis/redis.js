@@ -27,22 +27,36 @@ const initializeRedisClient = async () => {
         },
 
     });
+
+    // Need to set isOpen and isReady manually on v3
+    redisClient.on("connect", () => {
+        redisClient.isOpen = true;
+        console.log("redis-client: connecting...");
+    });
+    redisClient.on("ready", () => {
+        redisClient.isReady = true;
+        console.log("redis-client: connected and ready!");
+    });
+    redisClient.on("reconnecting", () => {
+        redisClient.isOpen = false;
+        console.log("redis-client: reconnecting...");
+    });
+    redisClient.on("end", () => {
+        redisClient.isOpen = false;
+        redisClient.isReady = false;
+        console.log("redis-client: disconnected and dead!");
+    });
     redisClient.on('error', (err) => {
         console.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         console.error("Connection to Redis server failed!");
         console.error(err);
     });
 
-    redisClient.on("connect", () => { console.log("redis-client: connecting..."); });
-    redisClient.on("ready", () => { console.log("redis-client: connected and ready!"); });
-
     redisClient.async = {};
     redisClient.async.get = promisify(redisClient.get).bind(redisClient);
     redisClient.async.set = promisify(redisClient.set).bind(redisClient);
     redisClient.async.ping = promisify(redisClient.ping).bind(redisClient);
 
-    // await redisClient.connect();
-    // Only needed in v4 node-redis lib
     console.log("Successfully initialized Redis Client");
 }
 
