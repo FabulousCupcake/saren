@@ -4,7 +4,6 @@ const { checkRedisClient } = require('./redis');
 const initializeHealthz = () => {
   http.createServer(async (req, res) => {
     const url = req.url;
-    console.log("Received HTTP request on", url);
     if (url === '/redis') {
       const isHealthy = await checkRedisClient();
       const statusCode = (isHealthy) ? 200 : 503;
