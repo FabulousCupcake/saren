@@ -41,7 +41,8 @@ const initializeRedisClient = async () => {
     redisClient.async.set = promisify(redisClient.set).bind(redisClient);
     redisClient.async.ping = promisify(redisClient.ping).bind(redisClient);
 
-    await redisClient.connect();
+    // await redisClient.connect();
+    // Only needed in v4 node-redis lib
     console.log("Successfully initialized Redis Client");
 }
 
