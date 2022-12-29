@@ -15,7 +15,7 @@ const initializeHealthz = () => {
     // Unknown route
     req.socket.end();
   }).listen(8080, function () {
-    console.log("Started HTTP server on port 8080");
+    console.log("Successfully started HTTP server on port 8080!");
   });
 }
 

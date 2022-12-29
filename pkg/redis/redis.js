@@ -47,9 +47,9 @@ const initializeRedisClient = async () => {
         console.log("redis-client: disconnected and dead!");
     });
     redisClient.on('error', (err) => {
-        console.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        console.error("Connection to Redis server failed!");
-        console.error(err);
+        console.error("!!!!!!!!!!!!!!!!!!");
+        console.error("Redis Client Error");
+        console.error(`${err}`);
     });
 
     redisClient.async = {};
