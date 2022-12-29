@@ -32,13 +32,13 @@ const initializeRedisClient = async () => {
         console.error("Connection to Redis server failed!");
         console.error(err);
     });
-    // await redisClient.connect(); // only needed in redis@v4
 
     redisClient.async = {};
     redisClient.async.get = promisify(redisClient.get).bind(redisClient);
     redisClient.async.set = promisify(redisClient.set).bind(redisClient);
     redisClient.async.ping = promisify(redisClient.ping).bind(redisClient);
 
+    await redisClient.connect();
     console.log("Successfully initialized Redis Client");
 }
 
