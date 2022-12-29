@@ -33,6 +33,9 @@ const initializeRedisClient = async () => {
         console.error(err);
     });
 
+    redisClient.on("connect", () => { console.log("redis-client: connecting..."); });
+    redisClient.on("ready", () => { console.log("redis-client: connected and ready!"); });
+
     redisClient.async = {};
     redisClient.async.get = promisify(redisClient.get).bind(redisClient);
     redisClient.async.set = promisify(redisClient.set).bind(redisClient);
