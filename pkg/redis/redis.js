@@ -2,8 +2,6 @@ const { createClient } = require("redis");
 const { promisify } = require("util");
 
 let redisClient;
-let asyncGet;
-let asyncSet;
 
 const initializeRedisClient = async () => {
     redisClient = createClient({
@@ -29,46 +27,52 @@ const initializeRedisClient = async () => {
         },
 
     });
-    // redisClient.on("error", err => console.log('Redis Client Error', err));
+    redisClient.on('error', (err) => {
+        console.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        console.error("Connection to Redis server failed!");
+        console.error(err);
+    });
     // await redisClient.connect(); // only needed in redis@v4
 
-    asyncGet = promisify(redisClient.get).bind(redisClient);
-    asyncSet = promisify(redisClient.set).bind(redisClient);
+    redisClient.async = {};
+    redisClient.async.get = promisify(redisClient.get).bind(redisClient);
+    redisClient.async.set = promisify(redisClient.set).bind(redisClient);
+    redisClient.async.ping = promisify(redisClient.ping).bind(redisClient);
 
     console.log("Successfully initialized Redis Client");
 }
 
 const setArmoryText = async (id, text) => {
     const key = `armory-${id}`;
-    await asyncSet(key, text);
+    await redisClient.async.set(key, text);
 }
 
 const getArmoryText = async (id) => {
     const key = `armory-${id}`;
-    return await asyncGet(key);
+    return await redisClient.async.get(key);
 }
 
 const setUserData = async (id, data) => {
     const text = JSON.stringify(data);
     const key = `userdata-${id}`;
-    await asyncSet(key, text);
+    await redisClient.async.set(key, text);
 }
 
 const getUserData = async (id) => {
     const key = `userdata-${id}`;
-    const data = await asyncGet(key);
+    const data = await redisClient.async.get(key);
     const text = JSON.parse(data);
     return text;
 }
 
 const setUserSyncTimestamp = async (id, text) => {
     const key = `user-sync-timestamp-${id}`;
-    await asyncSet(key, text);
+    await redisClient.async.set(key, text);
 }
 
 const getUserSyncTimestamp = async (id) => {
     const key = `user-sync-timestamp-${id}`;
-    return await asyncGet(key);
+    return await redisClient.async.get(key);
 }
 
 const getRedisClient = () => {

@@ -7,6 +7,7 @@ const { initializeLambdaClient } = require("./pkg/lambda/lambda.js");
 const { initializeSpreadsheetClient } = require("./pkg/sheets/sheets.js");
 const { initializeCommands } = require("./pkg/commands");
 const { initializeContextMenus } = require("./pkg/contextmenus");
+const { initializeHealthz } = require("./pkg/healthz/index.js");
 
 const TOKEN = process.env.DISCORD_TOKEN;
 
@@ -123,6 +124,7 @@ const handler = async (interaction) => {
 };
 
 const main = async () => {
+  initializeHealthz();
   initializeS3Client();
   await initializeRedisClient();
   initializeRateLimiters();
