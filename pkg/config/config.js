@@ -12,17 +12,9 @@ const VIRIDIAN = {
     spreadsheetId: "1nwXQZyGopqAsYi9uUZkDfOO9RcZtZe_wxsauWVd2hHY",
 };
 
-const VVEEPO = {
-    name: "VVeepo",
-    adminRoleId: "947923764832792616",
-    memberRoleId: "947865117306024016",
-    spreadsheetId: "1KNW18b-SmS3uLMT8YXiydGqe7dDF6fLdk64ntJGxnMY",
-};
-
 const clanConfigs = [
     VANILLA,
     VIRIDIAN,
-    VVEEPO,
 ];
 
 const ownerDiscordId = "109729829670154240";
