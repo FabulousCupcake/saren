@@ -62,8 +62,8 @@ const clanSyncFunc = async (interaction) => {
     const allMembers = await interaction.guild.members.fetch({ force: true });
     const clanMembers = allMembers.filter(m => m.roles.cache.has(clanConfig.memberRoleId));
 
-    // Stop if there's >30 members
-    if (clanMembers.size > 30) return interaction.followUp({
+    // Stop if there's >31 members
+    if (clanMembers.size > 31) return interaction.followUp({
         content: "There are too many people in the clan! Please make some space, I can't work! You can use `/saren clan status` to check the member list!",
         ephemeral: true,
     });
