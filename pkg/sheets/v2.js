@@ -112,16 +112,16 @@ const parseMaterialData = (resBody) => {
   const resultRows = [];
 
   // Add items
-  for (const [key, val] of NOTABLE_MATERIALS) {
-    const name = val;
+  for (const key in NOTABLE_MATERIALS) {
+    const name = NOTABLE_MATERIALS[key];
     const amount = resBody.item_list.find(i => i.id == key)?.stock || 0;
 
     resultRows.push({ name, amount });
   }
 
   // Add equipments
-  for (const [key, val] of NOTABLE_EQUIPMENTS) {
-    const name = val;
+  for (const key in NOTABLE_EQUIPMENTS) {
+    const name = NOTABLE_EQUIPMENTS[key];
     const amount = resBody.user_equip.find(i => i.id == key)?.stock || 0;
 
     resultRows.push({ name, amount });
