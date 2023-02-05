@@ -11,7 +11,7 @@ const VIRIDIAN = {
     adminRoleId: "923091835667234847",
     memberRoleId: "923090620019535902",
     spreadsheetId: "1nwXQZyGopqAsYi9uUZkDfOO9RcZtZe_wxsauWVd2hHY",
-    spreadsheetVersion: "1",
+    spreadsheetVersion: "2",
 };
 
 const clanConfigs = [
