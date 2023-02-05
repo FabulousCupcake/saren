@@ -4,6 +4,11 @@ const CHARA_COL_START = 1 // Col B
 const MATS_ROW_START = 3  // Row 4
 const MATS_COL_START = 20 // Col U
 
+const ROW_START = 3; // Row 4
+const ROW_END = 203; // Row 204
+const COL_START = 1; // Col B
+const COL_END  = 20;  // Col U
+
 // List of notable items
 const NOTABLE_MATERIALS = {
   "90005": "Divine Amulet",
@@ -139,6 +144,22 @@ const updateSheetMetadata = async (sheet) => {
 
 // updateSpreadsheet updates sheet with data
 const updateSheet = async (sheet, responseBody) => {
+  // Load Cells
+  await sheet.loadCells({
+    startRowIndex: ROW_START,
+    endRowIndex: ROW_END,
+    startColumnIndex: COL_START,
+    endColumnIndex: COL_END,
+  });
+
+  // Wipe them
+  for (let i = ROW_START; i < ROW_END; i++) {
+    for (let j = COL_START; j < COL_END; j++) {
+      const cell = sheet.getCell(i, j);
+      cell.value = "";
+    }
+  }
+
   // Write Character Data
   const charaData = parseCharacterData(responseBody);
   charaData.forEach((row, rowIndex) => {
