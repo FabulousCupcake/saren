@@ -43,10 +43,8 @@ const newFromTemplate = async (doc, newSheetName) => {
     await sheet.saveUpdatedCells();
 }
 
-const getSheetMethods = async (clanName) => {
+const getSheetMethods = (clanName) => {
     const version = clanConfigs.find(c => c.name == clanName).spreadsheetVersion;
-    console.log("version", version)
-    console.log("reval", METHOD_VERSION_MAP[version])
     return METHOD_VERSION_MAP[version];
 }
 
@@ -67,7 +65,6 @@ const updateSpreadsheet = async (clanName, responseBody) => {
     // Update accordingly with correct clan sheet version
     const sheet = doc.sheetsByTitle[username];
     const { updateSheet } = getSheetMethods(clanName);
-    console.log("updateSheet", updateSheet)
     await updateSheet(sheet, responseBody);
 
     // Send data
