@@ -44,7 +44,7 @@ const newFromTemplate = async (doc, newSheetName) => {
 }
 
 const getSheetMethods = async (clanName) => {
-    const version = clanConfigs[clanName].spreadsheetVersion;
+    const version = clanConfigs.find(c => c.name == clanName).spreadsheetVersion;
     return METHOD_VERSION_MAP[version];
 }
 
