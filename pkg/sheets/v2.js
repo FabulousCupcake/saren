@@ -137,9 +137,11 @@ const parseMaterialData = (resBody) => {
 
 // Updates row 1 containing name
 const updateSheetMetadata = async (sheet) => {
-  await sheet.loadCells(["F1", "M1"]);
-  sheet.getCellByA1("F1").value = "Automatic";
-  sheet.getCellByA1("M1").value = new Date().toUTCString();
+  await sheet.loadCells(["F1", "G1", "M1", "N1"]);
+  sheet.getCellByA1("F1").value = "Input Type:";
+  sheet.getCellByA1("G1").value = "Automatic";
+  sheet.getCellByA1("M1").value = "Last Update";
+  sheet.getCellByA1("N1").value = new Date().toUTCString();
 }
 
 // updateSpreadsheet updates sheet with data
