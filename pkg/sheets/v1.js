@@ -75,24 +75,10 @@ const updateSheetMetadata = async (sheet) => {
 
 // updateSpreadsheet updates sheet with data
 const updateSheet = async (sheet, responseBody) => {
-  // // Load Cells
-  // await sheet.loadCells({
-  //   startRowIndex: ROW_START,
-  //   endRowIndex: ROW_END,
-  //   startColumnIndex: COL_START,
-  //   endColumnIndex: COL_END,
-  // });
-
-  // // Wipe them
-  // for (let i = ROW_START; i < ROW_END; i++) {
-  //   for (let j = COL_START; j < COL_END; j++) {
-  //     const cell = sheet.getCell(i, j);
-  //     cell.value = "";
-  //   }
-  // }
-
-  // Write data
+  // Parse response from lambda
   const data = parseResponseBody(responseBody);
+
+  // Write to sheets
   data.forEach((row, rowIndex) => {
     row.forEach((col, colIndex) => {
       const cellRow = ROW_START + rowIndex;
