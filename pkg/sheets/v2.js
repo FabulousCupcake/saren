@@ -7,7 +7,7 @@ const MATS_COL_START = 20 // Col U
 const ROW_START = 3; // Row 4
 const ROW_END = 203; // Row 204
 const COL_START = 1; // Col B
-const COL_END  = 20;  // Col U
+const COL_END  = 22;  // Col V
 
 // List of notable items
 const NOTABLE_MATERIALS = {
