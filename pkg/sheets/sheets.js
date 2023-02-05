@@ -1,11 +1,10 @@
 const { GoogleSpreadsheet } = require("google-spreadsheet");
-const { parseResponseBody } = require("./parser.js");
 const { clanConfigs } = require("../config/config");
 
-const ROW_START = 3;
-const ROW_END = 203;
-const COL_START = 1;
-const COL_END = 18;
+const METHOD_VERSION_MAP = {
+    "1": require("./v1.js"),
+    "2": require("./v2.js"),
+};
 
 const docs = {};
 
@@ -29,13 +28,6 @@ const initializeSpreadsheetClient = async () => {
     }
 };
 
-// Updates row 1 containing name
-const updateSheetMetadata = async (sheet) => {
-    await sheet.loadCells(["F1", "M1"]);
-    sheet.getCellByA1("F1").value = "Automatic";
-    sheet.getCellByA1("M1").value = new Date().toUTCString();
-}
-
 const newFromTemplate = async (doc, newSheetName) => {
     await doc.sheetsByTitle["Template"].copyToSpreadsheet(doc.spreadsheetId);
     await doc.loadInfo();
@@ -51,6 +43,11 @@ const newFromTemplate = async (doc, newSheetName) => {
     await sheet.saveUpdatedCells();
 }
 
+const getSheetMethods = async (clanName) => {
+    const version = clanConfigs[clanName].spreadsheetVersion;
+    return METHOD_VERSION_MAP[version];
+}
+
 // updateSpreadsheet receives /load/index response body
 // 1. Attempts to find if sheet already exists and updates it
 // 2. If not found, create new sheet from Template sheet and update it
@@ -58,43 +55,17 @@ const updateSpreadsheet = async (clanName, responseBody) => {
     const doc = docs[clanName];
     const username = responseBody.user_info.user_name;
 
-    // Do we need to create new sheet from template?
+    // Create new from Template if non-existent
     doc.resetLocalCache()
     await doc.loadInfo();
     if (!doc.sheetsByTitle[username]) {
         await newFromTemplate(doc, username);
     }
 
-    // Load relevant ranges
+    // Update accordingly with correct clan sheet version
     const sheet = doc.sheetsByTitle[username];
-    await sheet.loadCells({
-        startRowIndex: ROW_START,
-        endRowIndex: ROW_END,
-        startColumnIndex: COL_START,
-        endColumnIndex: COL_END,
-    });
-
-    // Wipe them
-    for (let i = ROW_START; i < ROW_END; i++) {
-        for (let j = COL_START; j < COL_END; j++) {
-            const cell = sheet.getCell(i, j);
-            cell.value = "";
-        }
-    }
-
-    // Write data
-    const data = parseResponseBody(responseBody);
-    data.forEach((row, rowIndex) => {
-        row.forEach((col, colIndex) => {
-            const cellRow = ROW_START + rowIndex;
-            const cellCol = COL_START + colIndex;
-            const cell = sheet.getCell(cellRow, cellCol);
-            cell.value = col;
-        });
-    });
-
-    // Write metadata
-    await updateSheetMetadata(sheet);
+    const { updateSheet } = getSheetMethods(clanName);
+    await updateSheet(sheet, responseBody);
 
     // Send data
     return await sheet.saveUpdatedCells();
