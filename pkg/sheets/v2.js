@@ -173,7 +173,7 @@ const updateSheet = async (sheet, responseBody) => {
 
   // Write Materials Data
   const matsData = parseMaterialData(responseBody);
-  matsData.forEach(row, rowIndex => {
+  matsData.forEach((row, rowIndex) => {
     const cellRow = MATS_ROW_START + rowIndex;
     const nameCell = sheet.getCell(cellRow, MATS_COL_START);
     const amountCell = sheet.getCell(cellRow, MATS_COL_START + 1);
